@@ -1,0 +1,57 @@
+parameters:
+    # <parameter_name:>
+    #   uniform_range: [<lower value>,<upper value>] 
+    strain_rate:
+        uniform_range: [0.0002, 0.052]
+    temperature:
+        uniform_range: [300, 550]
+    min_quadrature_strain_norm:
+        uniform_range: [1.0e-12, 1.0e-8]
+
+selected_parameters: ["strain_rate", "temperature", "min_quadrature_strain_norm"]
+
+polynomial_order: 3
+
+campaign_name: "FabSCEMa"
+
+encoder_delimiter: "@"
+
+encoder_template_fname : "SCEMa_remote.template"
+encoder_target_filename: "inputs.json"
+decoder_target_filename: "output.csv"
+#  ['index','stress_00_macro','stress_01_macro','stress_02_macro','stress_11_macro','stress_12_macro','stress_22_macro']
+#  ['index','stress_00_nano', 'stress_01_nano', 'stress_02_nano', 'stress_11_nano', 'stress_12_nano','stress_22_nano']
+#decoder_output_columns: ['index', 'stress_00_macro', 'stress_01_macro', 'stress_02_macro', 'stress_11_macro', 'stress_12_macro', 'stress_22_macro', 'stress_00_nano', 'stress_01_nano', 'stress_02_nano','stress_11_nano', 'stress_12_nano', 'stress_22_nano']
+
+decoder_output_columns: ['stress_00_macro', 'stress_01_macro', 'stress_02_macro', 'stress_11_macro', 'stress_12_macro',
+                'stress_22_macro', 'stress_00_nano', 'stress_01_nano', 'stress_02_nano','stress_11_nano', 'stress_12_nano', 'stress_22_nano']
+
+
+#"type": "float", "min": 0.0, "max": 100.0, "default": 95.0
+params:
+  strain_rate:
+    type: "float"
+    min: "0.00000000000000001"
+    max: "0.054"
+    default: "0.002"
+
+  temperature:
+    type: "float"
+    min: "0.00000000000000001"
+    max: "600"
+    default: "350"
+
+  min_quadrature_strain_norm:
+    type: "float"
+    min: "0.00000000000000001"
+    max: "1.0e-8"
+    default: "1.0e-10"
+
+
+sampler_name: "PCESampler"
+distribution_type: "Uniform" # Uniform, DiscreteUniform
+quadrature_rule: "G"
+sparse: False
+growth: False
+midpoint_level1: False
+dimension_adaptive: False
