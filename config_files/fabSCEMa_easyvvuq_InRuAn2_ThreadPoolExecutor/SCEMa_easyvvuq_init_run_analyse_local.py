@@ -28,6 +28,37 @@ import matplotlib.pylab as plt
 
 import sys
 
+def print_to_file(str=None, results=None, campaign_work_dir=None):
+
+    results.plot_moments(qoi="{}".format(str), ylabel="{}".format(str), xlabel="Time", alpha=0.2,
+                         filename=os.path.join(campaign_work_dir, '{}_moments.png'.format(str)))
+    results.plot_sobols_first(
+        qoi="{}".format(str), xlabel="Time",
+        filename=os.path.join(campaign_work_dir, '{}_sobol_first.png'.format(str))
+    )
+
+    rho11 = results.describe('{}'.format(str), 'mean')
+    for k in results.sobols_total()['{}'.format(str)].keys():
+        plt.plot(rho11, results.sobols_total()['{}'.format(str)][k], label=k)
+    plt.legend(loc=0)
+    plt.xlabel('{} [Pa]'.format(str))
+    plt.ylabel('sobol_total')
+    plt.title('{}'.format(str))
+    plt.savefig(os.path.join(campaign_work_dir, '{}_sobols_total.png'.format(str)))
+    print("saving {}_sobol_total.png -->".format(str),
+          os.path.join(campaign_work_dir, '{}_sobol_total.png'.format(str)))
+
+    rho12 = results.describe('{}'.format(str), 'mean')
+    for k1 in results.sobols_second()['{}'.format(str)].keys():
+        for k2 in results.sobols_second()['{}'.format(str)][k1].keys():
+            plt.plot(rho12, results.sobols_second()['{}'.format(str)][k1][k2], label=k1 + '/' + k2)
+    plt.legend(loc=0, ncol=2)
+    plt.xlabel('{} [Pa]'.format(str))
+    plt.ylabel('sobol_second')
+    plt.title('{}'.format(str))
+    plt.savefig(os.path.join(campaign_work_dir, '{}_sobol_second.png'.format(str)))
+    print("saving {}_sobol_second.png -->".format(str),
+          os.path.join(campaign_work_dir, '{}_sobol_second.png'.format(str)))
 
 def init_run_analyse_campaign(work_dir=None, sampler_inputs_dir=None , inpt=None):
 
@@ -182,23 +213,32 @@ def init_run_analyse_campaign(work_dir=None, sampler_inputs_dir=None , inpt=None
     if campaign_params['sampler_name'] == 'SCSampler':
         analysis = uq.analysis.SCAnalysis(
             sampler=campaign._active_sampler,
-            qoi_cols=['stress_00_macro', 'stress_01_macro', 'stress_02_macro', 'stress_11_macro', 'stress_12_macro',
-                      'stress_22_macro', 'stress_00_nano', 'stress_01_nano', 'stress_02_nano', 'stress_11_nano',
-                      'stress_12_nano', 'stress_22_nano']
+            qoi_cols=["stress_00_macro", "stress_01_macro", "stress_02_macro", "stress_11_macro", "stress_12_macro",
+                      "stress_22_macro", "stress_00_nano", "stress_01_nano", "stress_02_nano", "stress_11_nano",
+                      "stress_12_nano", "stress_22_nano"]
+            # qoi_cols=['stress_00_macro', 'stress_01_macro', 'stress_02_macro', 'stress_11_macro', 'stress_12_macro',
+            #           'stress_22_macro', 'stress_00_nano', 'stress_01_nano', 'stress_02_nano', 'stress_11_nano',
+            #           'stress_12_nano', 'stress_22_nano']
         )
     elif campaign_params['sampler_name'] == 'PCESampler':
         analysis = uq.analysis.PCEAnalysis(
             sampler=campaign._active_sampler,
-            qoi_cols=['stress_00_macro', 'stress_01_macro', 'stress_02_macro', 'stress_11_macro', 'stress_12_macro',
-                      'stress_22_macro', 'stress_00_nano', 'stress_01_nano', 'stress_02_nano', 'stress_11_nano',
-                      'stress_12_nano', 'stress_22_nano']
+            qoi_cols=["stress_00_macro", "stress_01_macro", "stress_02_macro", "stress_11_macro", "stress_12_macro",
+                      "stress_22_macro", "stress_00_nano", "stress_01_nano", "stress_02_nano", "stress_11_nano",
+                      "stress_12_nano", "stress_22_nano"]
+            # qoi_cols=['stress_00_macro', 'stress_01_macro', 'stress_02_macro', 'stress_11_macro', 'stress_12_macro',
+            #           'stress_22_macro', 'stress_00_nano', 'stress_01_nano', 'stress_02_nano', 'stress_11_nano',
+            #           'stress_12_nano', 'stress_22_nano']
         )
     elif campaign_params['sampler_name'] == 'QMCSampler':
         analysis = uq.analysis.QMCAnalysis(
             sampler=campaign._active_sampler,
-            qoi_cols=['stress_00_macro', 'stress_01_macro', 'stress_02_macro', 'stress_11_macro', 'stress_12_macro',
-                      'stress_22_macro', 'stress_00_nano', 'stress_01_nano', 'stress_02_nano', 'stress_11_nano',
-                      'stress_12_nano', 'stress_22_nano']
+            qoi_cols=["stress_00_macro", "stress_01_macro", "stress_02_macro", "stress_11_macro", "stress_12_macro",
+                      "stress_22_macro", "stress_00_nano", "stress_01_nano", "stress_02_nano", "stress_11_nano",
+                      "stress_12_nano", "stress_22_nano"]
+            # qoi_cols=['stress_00_macro', 'stress_01_macro', 'stress_02_macro', 'stress_11_macro', 'stress_12_macro',
+            #           'stress_22_macro', 'stress_00_nano', 'stress_01_nano', 'stress_02_nano', 'stress_11_nano',
+            #           'stress_12_nano', 'stress_22_nano']
         )
 
     # ["index", "stress_00_macro", "stress_01_macro", "stress_02_macro", "stress_11_macro", "stress_12_macro",
@@ -217,7 +257,7 @@ def init_run_analyse_campaign(work_dir=None, sampler_inputs_dir=None , inpt=None
     time_start = time.time()
 
     # Get Descriptive Statistics
-    results_df = campaign.get_collation_result()
+    # results_df = campaign.get_collation_result()
     results = campaign.get_last_analysis()
 
 
@@ -226,437 +266,12 @@ def init_run_analyse_campaign(work_dir=None, sampler_inputs_dir=None , inpt=None
     print("the first order sobol index :")
     print(results.sobols_first()['stress_00_macro'])
 
-    mean = results.describe("stress_00_macro", "mean")
-    var = results.describe("stress_00_macro", "var")
-
-    t = np.linspace(0, 200, 150)
-    results.plot_moments(qoi="stress_00_macro", ylabel="stress_00_macro", xlabel="Time", alpha=0.2,
-                         filename=os.path.join(campaign_work_dir, 'stress_00_macro_moments.png'))
-    results.plot_sobols_first(
-        qoi="stress_00_macro", xlabel="Time",
-        filename=os.path.join(campaign_work_dir, 'stress_00_macro_sobols_first.png')
-    )
-
-    plt.figure()
-    rho00 = results.describe('stress_00_macro', 'mean')
-    for k in results.sobols_total()['stress_00_macro'].keys():
-        plt.plot(rho00, results.sobols_total()['stress_00_macro'][k], label=k)
-    plt.legend(loc=0)
-    plt.xlabel('stress_00_macro [Pa]')
-    plt.ylabel('sobols_total')
-    plt.title('stress_00_macro')
-    plt.savefig(os.path.join(campaign_work_dir, 'stress_00_macro_sobols_total.png'))
-    print("saving stress_00_macro_sobols_total.png -->", os.path.join(campaign_work_dir, 'stress_00_macro_sobols_total.png'))
-    plt.close()
-    plt.figure()
-    rho02 = results.describe('stress_00_macro', 'mean')
-    for k1 in results.sobols_second()['stress_00_macro'].keys():
-        for k2 in results.sobols_second()['stress_00_macro'][k1].keys():
-            plt.plot(rho02, results.sobols_second()['stress_00_macro'][k1][k2], label=k1 + '/' + k2)
-    plt.legend(loc=0, ncol=2)
-    plt.xlabel('stress_00_macro [Pa]')
-    plt.ylabel('sobols_second')
-    plt.title('stress_00_macro')
-    plt.savefig(os.path.join(campaign_work_dir, 'stress_00_macro_sobols_second.png'))
-    print("saving stress_00_macro_sobols_second.png -->",
-          os.path.join(campaign_work_dir, 'stress_00_macro_sobols_second.png'))
-    plt.close()
-
-    t = np.linspace(0, 200, 150)
-    results.plot_moments(qoi="stress_00_nano", ylabel="stress_00_nano", xlabel="Time", alpha=0.2,
-                         filename=os.path.join(campaign_work_dir, 'stress_00_nano_moments.png'))
-    results.plot_sobols_first(
-        qoi="stress_00_nano", xlabel="Time",
-        filename=os.path.join(campaign_work_dir, 'stress_00_nano_sobols_first.png')
-    )
-    plt.figure()
-    rho11 = results.describe('stress_00_nano', 'mean')
-    for k in results.sobols_total()['stress_00_nano'].keys():
-        plt.plot(rho11, results.sobols_total()['stress_00_nano'][k], label=k)
-    plt.legend(loc=0)
-    plt.xlabel('stress_00_nano [Pa]')
-    plt.ylabel('sobols_total')
-    plt.title('stress_00_nano')
-    plt.savefig(os.path.join(campaign_work_dir, 'stress_00_nano_sobols_total.png'))
-    print("saving stress_00_nano_sobols_total.png -->",
-          os.path.join(campaign_work_dir, 'stress_00_nano_sobols_total.png'))
-    plt.close()
-    plt.figure()
-    rho12 = results.describe('stress_00_nano', 'mean')
-    for k1 in results.sobols_second()['stress_00_nano'].keys():
-        for k2 in results.sobols_second()['stress_00_nano'][k1].keys():
-            plt.plot(rho12, results.sobols_second()['stress_00_nano'][k1][k2], label=k1 + '/' + k2)
-    plt.legend(loc=0, ncol=2)
-    plt.xlabel('stress_00_nano [Pa]')
-    plt.ylabel('sobols_second')
-    plt.title('stress_00_nano')
-    plt.savefig(os.path.join(campaign_work_dir, 'stress_00_nano_sobols_second.png'))
-    print("saving stress_00_nano_sobols_second.png -->",
-          os.path.join(campaign_work_dir, 'stress_00_nano_sobols_second.png'))
-    plt.close()
-
-    mean = results.describe("stress_01_macro", "mean")
-    var = results.describe("stress_01_macro", "var")
-
-    t = np.linspace(0, 200, 150)
-    results.plot_moments(qoi="stress_01_macro", ylabel="stress_01_macro", xlabel="Time", alpha=0.2,
-                         filename=os.path.join(campaign_work_dir, 'stress_01_macro_moments.png'))
-    results.plot_sobols_first(
-        qoi="stress_01_macro", xlabel="Time",
-        filename=os.path.join(campaign_work_dir, 'stress_01_macro_sobols_first.png')
-    )
-
-    plt.figure()
-    rho00 = results.describe('stress_01_macro', 'mean')
-    for k in results.sobols_total()['stress_01_macro'].keys():
-        plt.plot(rho00, results.sobols_total()['stress_01_macro'][k], label=k)
-    plt.legend(loc=0)
-    plt.xlabel('stress_01_macro [Pa]')
-    plt.ylabel('sobols_total')
-    plt.title('stress_01_macro')
-    plt.savefig(os.path.join(campaign_work_dir, 'stress_01_macro_sobols_total.png'))
-    print("saving stress_01_macro_sobols_total.png -->", os.path.join(campaign_work_dir, 'stress_01_macro_sobols_total.png'))
-    plt.close()
-    plt.figure()
-    rho02 = results.describe('stress_01_macro', 'mean')
-    for k1 in results.sobols_second()['stress_01_macro'].keys():
-        for k2 in results.sobols_second()['stress_01_macro'][k1].keys():
-            plt.plot(rho02, results.sobols_second()['stress_01_macro'][k1][k2], label=k1 + '/' + k2)
-    plt.legend(loc=0, ncol=2)
-    plt.xlabel('stress_01_macro [Pa]')
-    plt.ylabel('sobols_second')
-    plt.title('stress_01_macro')
-    plt.savefig(os.path.join(campaign_work_dir, 'stress_01_macro_sobols_second.png'))
-    print("saving stress_01_macro_sobols_second.png -->",
-          os.path.join(campaign_work_dir, 'stress_01_macro_sobols_second.png'))
-    plt.close()
-
-    t = np.linspace(0, 200, 150)
-    results.plot_moments(qoi="stress_01_nano", ylabel="stress_01_nano", xlabel="Time", alpha=0.2,
-                         filename=os.path.join(campaign_work_dir, 'stress_01_nano_moments.png'))
-    results.plot_sobols_first(
-        qoi="stress_01_nano", xlabel="Time",
-        filename=os.path.join(campaign_work_dir, 'stress_01_nano_sobols_first.png')
-    )
-    plt.figure()
-    rho11 = results.describe('stress_01_nano', 'mean')
-    for k in results.sobols_total()['stress_01_nano'].keys():
-        plt.plot(rho11, results.sobols_total()['stress_01_nano'][k], label=k)
-    plt.legend(loc=0)
-    plt.xlabel('stress_01_nano [Pa]')
-    plt.ylabel('sobols_total')
-    plt.title('stress_01_nano')
-    plt.savefig(os.path.join(campaign_work_dir, 'stress_01_nano_sobols_total.png'))
-    print("saving stress_01_nano_sobols_total.png -->",
-          os.path.join(campaign_work_dir, 'stress_01_nano_sobols_total.png'))
-    plt.close()
-    plt.figure()
-    rho12 = results.describe('stress_01_nano', 'mean')
-    for k1 in results.sobols_second()['stress_01_nano'].keys():
-        for k2 in results.sobols_second()['stress_01_nano'][k1].keys():
-            plt.plot(rho12, results.sobols_second()['stress_01_nano'][k1][k2], label=k1 + '/' + k2)
-    plt.legend(loc=0, ncol=2)
-    plt.xlabel('stress_01_nano [Pa]')
-    plt.ylabel('sobols_second')
-    plt.title('stress_01_nano')
-    plt.savefig(os.path.join(campaign_work_dir, 'stress_01_nano_sobols_second.png'))
-    print("saving stress_01_nano_sobols_second.png -->",
-          os.path.join(campaign_work_dir, 'stress_01_nano_sobols_second.png'))
-    plt.close()
-
-
-    mean = results.describe("stress_02_macro", "mean")
-    var = results.describe("stress_02_macro", "var")
-
-    t = np.linspace(0, 200, 150)
-    results.plot_moments(qoi="stress_02_macro", ylabel="stress_02_macro", xlabel="Time", alpha=0.2,
-                         filename=os.path.join(campaign_work_dir, 'stress_02_macro_moments.png'))
-    results.plot_sobols_first(
-        qoi="stress_02_macro", xlabel="Time",
-        filename=os.path.join(campaign_work_dir, 'stress_02_macro_sobols_first.png')
-    )
-
-    plt.figure()
-    rho00 = results.describe('stress_02_macro', 'mean')
-    for k in results.sobols_total()['stress_02_macro'].keys():
-        plt.plot(rho00, results.sobols_total()['stress_02_macro'][k], label=k)
-    plt.legend(loc=0)
-    plt.xlabel('stress_02_macro [Pa]')
-    plt.ylabel('sobols_total')
-    plt.title('stress_02_macro')
-    plt.savefig(os.path.join(campaign_work_dir, 'stress_02_macro_sobols_total.png'))
-    print("saving stress_02_macro_sobols_total.png -->", os.path.join(campaign_work_dir, 'stress_02_macro_sobols_total.png'))
-    plt.close()
-    plt.figure()
-    rho02 = results.describe('stress_02_macro', 'mean')
-    for k1 in results.sobols_second()['stress_02_macro'].keys():
-        for k2 in results.sobols_second()['stress_02_macro'][k1].keys():
-            plt.plot(rho02, results.sobols_second()['stress_02_macro'][k1][k2], label=k1 + '/' + k2)
-    plt.legend(loc=0, ncol=2)
-    plt.xlabel('stress_02_macro [Pa]')
-    plt.ylabel('sobols_second')
-    plt.title('stress_02_macro')
-    plt.savefig(os.path.join(campaign_work_dir, 'stress_02_macro_sobols_second.png'))
-    print("saving stress_02_macro_sobols_second.png -->",
-          os.path.join(campaign_work_dir, 'stress_02_macro_sobols_second.png'))
-    plt.close()
-
-    t = np.linspace(0, 200, 150)
-    results.plot_moments(qoi="stress_02_nano", ylabel="stress_02_nano", xlabel="Time", alpha=0.2,
-                         filename=os.path.join(campaign_work_dir, 'stress_02_nano_moments.png'))
-    results.plot_sobols_first(
-        qoi="stress_02_nano", xlabel="Time",
-        filename=os.path.join(campaign_work_dir, 'stress_02_nano_sobols_first.png')
-    )
-    plt.figure()
-    rho11 = results.describe('stress_02_nano', 'mean')
-    for k in results.sobols_total()['stress_02_nano'].keys():
-        plt.plot(rho11, results.sobols_total()['stress_02_nano'][k], label=k)
-    plt.legend(loc=0)
-    plt.xlabel('stress_02_nano [Pa]')
-    plt.ylabel('sobols_total')
-    plt.title('stress_02_nano')
-    plt.savefig(os.path.join(campaign_work_dir, 'stress_02_nano_sobols_total.png'))
-    print("saving stress_02_nano_sobols_total.png -->",
-          os.path.join(campaign_work_dir, 'stress_02_nano_sobols_total.png'))
-    plt.close()
-    plt.figure()
-    rho12 = results.describe('stress_02_nano', 'mean')
-    for k1 in results.sobols_second()['stress_02_nano'].keys():
-        for k2 in results.sobols_second()['stress_02_nano'][k1].keys():
-            plt.plot(rho12, results.sobols_second()['stress_02_nano'][k1][k2], label=k1 + '/' + k2)
-    plt.legend(loc=0, ncol=2)
-    plt.xlabel('stress_02_nano [Pa]')
-    plt.ylabel('sobols_second')
-    plt.title('stress_02_nano')
-    plt.savefig(os.path.join(campaign_work_dir, 'stress_02_nano_sobols_second.png'))
-    print("saving stress_02_nano_sobols_second.png -->",
-          os.path.join(campaign_work_dir, 'stress_02_nano_sobols_second.png'))
-    plt.close()
-
-    mean = results.describe("stress_11_macro", "mean")
-    var = results.describe("stress_11_macro", "var")
-
-    t = np.linspace(0, 200, 150)
-    results.plot_moments(qoi="stress_11_macro", ylabel="stress_11_macro", xlabel="Time", alpha=0.2,
-                         filename=os.path.join(campaign_work_dir, 'stress_11_macro_moments.png'))
-    results.plot_sobols_first(
-        qoi="stress_11_macro", xlabel="Time",
-        filename=os.path.join(campaign_work_dir, 'stress_11_macro_sobols_first.png')
-    )
-
-    plt.figure()
-    rho00 = results.describe('stress_11_macro', 'mean')
-    for k in results.sobols_total()['stress_11_macro'].keys():
-        plt.plot(rho00, results.sobols_total()['stress_11_macro'][k], label=k)
-    plt.legend(loc=0)
-    plt.xlabel('stress_11_macro [Pa]')
-    plt.ylabel('sobols_total')
-    plt.title('stress_11_macro')
-    plt.savefig(os.path.join(campaign_work_dir, 'stress_11_macro_sobols_total.png'))
-    print("saving stress_11_macro_sobols_total.png -->", os.path.join(campaign_work_dir, 'stress_11_macro_sobols_total.png'))
-    plt.close()
-    plt.figure()
-    rho02 = results.describe('stress_11_macro', 'mean')
-    for k1 in results.sobols_second()['stress_11_macro'].keys():
-        for k2 in results.sobols_second()['stress_11_macro'][k1].keys():
-            plt.plot(rho02, results.sobols_second()['stress_11_macro'][k1][k2], label=k1 + '/' + k2)
-    plt.legend(loc=0, ncol=2)
-    plt.xlabel('stress_11_macro [Pa]')
-    plt.ylabel('sobols_second')
-    plt.title('stress_11_macro')
-    plt.savefig(os.path.join(campaign_work_dir, 'stress_11_macro_sobols_second.png'))
-    print("saving stress_11_macro_sobols_second.png -->",
-          os.path.join(campaign_work_dir, 'stress_11_macro_sobols_second.png'))
-    plt.close()
-
-    t = np.linspace(0, 200, 150)
-    results.plot_moments(qoi="stress_11_nano", ylabel="stress_11_nano", xlabel="Time", alpha=0.2,
-                         filename=os.path.join(campaign_work_dir, 'stress_11_nano_moments.png'))
-    results.plot_sobols_first(
-        qoi="stress_11_nano", xlabel="Time",
-        filename=os.path.join(campaign_work_dir, 'stress_11_nano_sobols_first.png')
-    )
-    plt.figure()
-    rho11 = results.describe('stress_11_nano', 'mean')
-    for k in results.sobols_total()['stress_11_nano'].keys():
-        plt.plot(rho11, results.sobols_total()['stress_11_nano'][k], label=k)
-    plt.legend(loc=0)
-    plt.xlabel('stress_11_nano [Pa]')
-    plt.ylabel('sobols_total')
-    plt.title('stress_11_nano')
-    plt.savefig(os.path.join(campaign_work_dir, 'stress_11_nano_sobols_total.png'))
-    print("saving stress_11_nano_sobols_total.png -->",
-          os.path.join(campaign_work_dir, 'stress_11_nano_sobols_total.png'))
-    plt.close()
-    plt.figure()
-    rho12 = results.describe('stress_11_nano', 'mean')
-    for k1 in results.sobols_second()['stress_11_nano'].keys():
-        for k2 in results.sobols_second()['stress_11_nano'][k1].keys():
-            plt.plot(rho12, results.sobols_second()['stress_11_nano'][k1][k2], label=k1 + '/' + k2)
-    plt.legend(loc=0, ncol=2)
-    plt.xlabel('stress_11_nano [Pa]')
-    plt.ylabel('sobols_second')
-    plt.title('stress_11_nano')
-    plt.savefig(os.path.join(campaign_work_dir, 'stress_11_nano_sobols_second.png'))
-    print("saving stress_11_nano_sobols_second.png -->",
-          os.path.join(campaign_work_dir, 'stress_11_nano_sobols_second.png'))
-    plt.close()
-
-
-    mean = results.describe("stress_12_macro", "mean")
-    var = results.describe("stress_12_macro", "var")
-
-    t = np.linspace(0, 200, 150)
-    results.plot_moments(qoi="stress_12_macro", ylabel="stress_12_macro", xlabel="Time", alpha=0.2,
-                         filename=os.path.join(campaign_work_dir, 'stress_12_macro_moments.png'))
-    results.plot_sobols_first(
-        qoi="stress_12_macro", xlabel="Time",
-        filename=os.path.join(campaign_work_dir, 'stress_12_macro_sobols_first.png')
-    )
-
-    plt.figure()
-    rho00 = results.describe('stress_12_macro', 'mean')
-    for k in results.sobols_total()['stress_12_macro'].keys():
-        plt.plot(rho00, results.sobols_total()['stress_12_macro'][k], label=k)
-    plt.legend(loc=0)
-    plt.xlabel('stress_12_macro [Pa]')
-    plt.ylabel('sobols_total')
-    plt.title('stress_12_macro')
-    plt.savefig(os.path.join(campaign_work_dir, 'stress_12_macro_sobols_total.png'))
-    print("saving stress_12_macro_sobols_total.png -->", os.path.join(campaign_work_dir, 'stress_12_macro_sobols_total.png'))
-    plt.close()
-    plt.figure()
-    rho02 = results.describe('stress_12_macro', 'mean')
-    for k1 in results.sobols_second()['stress_12_macro'].keys():
-        for k2 in results.sobols_second()['stress_12_macro'][k1].keys():
-            plt.plot(rho02, results.sobols_second()['stress_12_macro'][k1][k2], label=k1 + '/' + k2)
-    plt.legend(loc=0, ncol=2)
-    plt.xlabel('stress_12_macro [Pa]')
-    plt.ylabel('sobols_second')
-    plt.title('stress_12_macro')
-    plt.savefig(os.path.join(campaign_work_dir, 'stress_12_macro_sobols_second.png'))
-    print("saving stress_12_macro_sobols_second.png -->",
-          os.path.join(campaign_work_dir, 'stress_12_macro_sobols_second.png'))
-    plt.close()
-
-    t = np.linspace(0, 200, 150)
-    results.plot_moments(qoi="stress_12_nano", ylabel="stress_12_nano", xlabel="Time", alpha=0.2,
-                         filename=os.path.join(campaign_work_dir, 'stress_12_nano_moments.png'))
-    results.plot_sobols_first(
-        qoi="stress_12_nano", xlabel="Time",
-        filename=os.path.join(campaign_work_dir, 'stress_12_nano_sobols_first.png')
-    )
-    plt.figure()
-    rho11 = results.describe('stress_12_nano', 'mean')
-    for k in results.sobols_total()['stress_12_nano'].keys():
-        plt.plot(rho11, results.sobols_total()['stress_12_nano'][k], label=k)
-    plt.legend(loc=0)
-    plt.xlabel('stress_12_nano [Pa]')
-    plt.ylabel('sobols_total')
-    plt.title('stress_12_nano')
-    plt.savefig(os.path.join(campaign_work_dir, 'stress_12_nano_sobols_total.png'))
-    print("saving stress_12_nano_sobols_total.png -->",
-          os.path.join(campaign_work_dir, 'stress_12_nano_sobols_total.png'))
-    plt.close()
-    plt.figure()
-    rho12 = results.describe('stress_12_nano', 'mean')
-    for k1 in results.sobols_second()['stress_12_nano'].keys():
-        for k2 in results.sobols_second()['stress_12_nano'][k1].keys():
-            plt.plot(rho12, results.sobols_second()['stress_12_nano'][k1][k2], label=k1 + '/' + k2)
-    plt.legend(loc=0, ncol=2)
-    plt.xlabel('stress_12_nano [Pa]')
-    plt.ylabel('sobols_second')
-    plt.title('stress_12_nano')
-    plt.savefig(os.path.join(campaign_work_dir, 'stress_12_nano_sobols_second.png'))
-    print("saving stress_12_nano_sobols_second.png -->",
-          os.path.join(campaign_work_dir, 'stress_12_nano_sobols_second.png'))
-    plt.close()
-
-
-    mean = results.describe("stress_22_macro", "mean")
-    var = results.describe("stress_22_macro", "var")
-
-    t = np.linspace(0, 200, 150)
-    results.plot_moments(qoi="stress_22_macro", ylabel="stress_22_macro", xlabel="Time", alpha=0.2,
-                         filename=os.path.join(campaign_work_dir, 'stress_22_macro_moments.png'))
-    results.plot_sobols_first(
-        qoi="stress_22_macro", xlabel="Time",
-        filename=os.path.join(campaign_work_dir, 'stress_22_macro_sobols_first.png')
-    )
-
-    plt.figure()
-    rho00 = results.describe('stress_22_macro', 'mean')
-    for k in results.sobols_total()['stress_22_macro'].keys():
-        plt.plot(rho00, results.sobols_total()['stress_22_macro'][k], label=k)
-    plt.legend(loc=0)
-    plt.xlabel('stress_22_macro [Pa]')
-    plt.ylabel('sobols_total')
-    plt.title('stress_22_macro')
-    plt.savefig(os.path.join(campaign_work_dir, 'stress_22_macro_sobols_total.png'))
-    print("saving stress_22_macro_sobols_total.png -->", os.path.join(campaign_work_dir, 'stress_22_macro_sobols_total.png'))
-    plt.close()
-    plt.figure()
-    rho02 = results.describe('stress_22_macro', 'mean')
-    for k1 in results.sobols_second()['stress_22_macro'].keys():
-        for k2 in results.sobols_second()['stress_22_macro'][k1].keys():
-            plt.plot(rho02, results.sobols_second()['stress_22_macro'][k1][k2], label=k1 + '/' + k2)
-    plt.legend(loc=0, ncol=2)
-    plt.xlabel('stress_22_macro [Pa]')
-    plt.ylabel('sobols_second')
-    plt.title('stress_22_macro')
-    plt.savefig(os.path.join(campaign_work_dir, 'stress_22_macro_sobols_second.png'))
-    print("saving stress_22_macro_sobols_second.png -->",
-          os.path.join(campaign_work_dir, 'stress_22_macro_sobols_second.png'))
-    plt.close()
-
-    t = np.linspace(0, 200, 150)
-    results.plot_moments(qoi="stress_22_nano", ylabel="stress_22_nano", xlabel="Time", alpha=0.2,
-                         filename=os.path.join(campaign_work_dir, 'stress_22_nano_moments.png'))
-    results.plot_sobols_first(
-        qoi="stress_22_nano", xlabel="Time",
-        filename=os.path.join(campaign_work_dir, 'stress_22_nano_sobols_first.png')
-    )
-    plt.figure()
-    rho11 = results.describe('stress_22_nano', 'mean')
-    for k in results.sobols_total()['stress_22_nano'].keys():
-        plt.plot(rho11, results.sobols_total()['stress_22_nano'][k], label=k)
-    plt.legend(loc=0)
-    plt.xlabel('stress_22_nano [Pa]')
-    plt.ylabel('sobols_total')
-    plt.title('stress_22_nano')
-    plt.savefig(os.path.join(campaign_work_dir, 'stress_22_nano_sobols_total.png'))
-    print("saving stress_22_nano_sobols_total.png -->",
-          os.path.join(campaign_work_dir, 'stress_22_nano_sobols_total.png'))
-    plt.close()
-    plt.figure()
-    rho12 = results.describe('stress_22_nano', 'mean')
-    for k1 in results.sobols_second()['stress_22_nano'].keys():
-        for k2 in results.sobols_second()['stress_22_nano'][k1].keys():
-            plt.plot(rho12, results.sobols_second()['stress_22_nano'][k1][k2], label=k1 + '/' + k2)
-    plt.legend(loc=0, ncol=2)
-    plt.xlabel('stress_22_nano [Pa]')
-    plt.ylabel('sobols_second')
-    plt.title('stress_22_nano')
-    plt.savefig(os.path.join(campaign_work_dir, 'stress_22_nano_sobols_second.png'))
-    print("saving stress_22_nano_sobols_second.png -->",
-          os.path.join(campaign_work_dir, 'stress_22_nano_sobols_second.png'))
-    plt.close()
-
-    # stress_00_macro = results.describe("stress_00_macro", "mean")
-    # # stress_01_macro = results.describe("stress_01_macro", "mean")
-    # # stress_02_macro = results.describe("stress_02_macro", "mean")
-    # # stress_11_macro = results.describe("stress_11_macro", "mean")
-    # # stress_12_macro = results.describe("stress_12_macro", "mean")
-    # # stress_22_macro = results.describe("stress_22_macro", "mean")
+    # mean = results.describe("stress_00_macro", "mean")
+    # var = results.describe("stress_00_macro", "var")
     #
-    # stress_00_nano = results.describe("stress_00_nano", "mean")
-    # # stress_01_nano = results.describe("stress_01_nano", "mean")
-    # # stress_02_nano = results.describe("stress_02_nano", "mean")
-    # # stress_11_nano = results.describe("stress_11_nano", "mean")
-    # # stress_12_nano = results.describe("stress_12_nano", "mean")
-    # # stress_22_nano = results.describe("stress_22_nano", "mean")
 
+    for s_string in output_column:
+        print_to_file(str=s_string, results=results, campaign_work_dir=campaign_work_dir)
 
 
     time_end = time.time()
@@ -670,83 +285,9 @@ def init_run_analyse_campaign(work_dir=None, sampler_inputs_dir=None , inpt=None
     time_end = time.time()
     print("Time for phase 8 = %.3f" % (time_end - time_start))
 
-    # plt.ion()
-    #
-    # # plot the calculated Te: mean, with std deviation, 10 and 90% and range
-    # stress_00_macro_mean = results.describe("stress_00_macro", "mean")
-    # stress_00_macro_std = results.describe("stress_00_macro", "std")
-    # stress_00_macro_10_pct = results.describe("stress_00_macro", "10%")
-    # stress_00_macro_90_pct = results.describe("stress_00_macro", "90%")
-    # stress_00_macro_min = results.describe("stress_00_macro", "min")
-    # stress_00_macro_max = results.describe("stress_00_macro", "max")
-    #
-    # plt.figure()
-    # plt.plot(stress_00_nano, stress_00_macro_mean, "b-", label="Mean")
-    # plt.plot(stress_00_nano, stress_00_macro_mean - stress_00_macro_std, "b--", label="+1 std deviation")
-    # plt.plot(stress_00_nano, stress_00_macro_mean + stress_00_macro_std, "b--")
-    # plt.fill_between(stress_00_nano, stress_00_macro_mean - stress_00_macro_std, stress_00_macro_mean + stress_00_macro_std,
-    #                  color="b", alpha=0.2)
-    # plt.plot(stress_00_nano, stress_00_macro_10_pct, "b:", label="10 and 90 percentiles")
-    # plt.plot(stress_00_nano, stress_00_macro_90_pct, "b:")
-    # plt.fill_between(stress_00_nano, stress_00_macro_10_pct, stress_00_macro_90_pct, color="b", alpha=0.1)
-    # plt.fill_between(stress_00_nano, stress_00_macro_min, stress_00_macro_max, color="b", alpha=0.05)
-    #
-    # plt.legend(loc=0)
-    # plt.xlabel("stress_00_nano")
-    # plt.ylabel("stress_00_macro")
-    # plt.savefig(os.path.join(campaign_work_dir, "stress_00_macro.png"))
-    #
-    # # plot the first Sobol results
-    # plt.figure()
-    # for k in results.sobols_first()["stress_00_macro"].keys():
-    #     plt.plot(stress_00_nano, results.sobols_first()["stress_00_macro"][k], label=k)
-    # plt.legend(loc=0)
-    # plt.xlabel("stress_00_nano")
-    # plt.ylabel("sobols_first")
-    # plt.savefig(os.path.join(campaign_work_dir, "sobols_first.png"))
-    #
-    # # plot the second Sobol results
-    # plt.figure()
-    # for k1 in results.sobols_second()["stress_00_macro"].keys():
-    #     for k2 in results.sobols_second()["stress_00_macro"][k1].keys():
-    #         plt.plot(stress_00_nano, results.sobols_second()["stress_00_macro"][k1][k2],
-    #                  label=k1 + "/" + k2)
-    # plt.legend(loc=0, ncol=2)
-    # plt.xlabel("stress_00_nano")
-    # plt.ylabel("sobols_second")
-    # plt.savefig(os.path.join(campaign_work_dir, "sobols_second.png"))
-    #
-    # # plot the total Sobol results
-    # plt.figure()
-    # for k in results.sobols_total()["stress_00_macro"].keys():
-    #     plt.plot(stress_00_nano, results.sobols_total()["stress_00_macro"][k], label=k)
-    # plt.legend(loc=0)
-    # plt.xlabel("stress_00_nano")
-    # plt.ylabel("sobols_total")
-    # plt.savefig(os.path.join(campaign_work_dir, "sobols_total.png"))
-    #
-    # t_dist = results.raw_data["output_distributions"]["stress_00_macro"]
-    # for i in [0]:
-    #     plt.figure()
-    #     plt.hist(results_df.stress_00_nano[i], density=True, bins=50,
-    #              label="histogram of raw samples", alpha=0.25)
-    #     if hasattr(t_dist, "samples"):
-    #         plt.hist(t_dist.samples[i], density=True, bins=50,
-    #                  label="histogram of kde samples", alpha=0.25)
-    #     t1 = t_dist[i]
-    #     plt.plot(
-    #         np.linspace(t1.lower, t1.upper),
-    #         t1.pdf(np.linspace(t1.lower, t1.upper)),
-    #         label="PDF"
-    #     )
-    #     plt.legend(loc=0)
-    #     plt.xlabel("stress_00_macro")
-    #     plt.title("Distributions for stress_00_macro = %0.4f" % (stress_00_macro[i]))
-    #     png_file_name = os.path.join(
-    #         campaign_work_dir,
-    #         "distribution_function_stress_00_macro=%0.4f.png" % (stress_00_macro[i])
-    #     )
-    #     plt.savefig(png_file_name)
+    print('\x1b[6;30;41m' + '.........................' + '\x1b[0m')
+    print('\x1b[6;30;41m' + 'Problem analysis is done!' + '\x1b[0m')
+    print('\x1b[6;30;41m' + '.........................' + '\x1b[0m')    
 
 def load_campaign_params(sampler_inputs_dir=None, machine=None):
     if str(machine) == 'localhost':
