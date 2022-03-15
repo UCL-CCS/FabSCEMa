@@ -55,4 +55,31 @@ and copy the results back to your local machine with
  -  fabsim  localhost   fetch_results
  -  fabsim  <remote machine name>   fetch_results
 ```
+## EasyVVUQ+EasySurrogate+FabSCEMa 
+After updating the following files with your credentials
+
+```
+  -FabSim3/deploy/machines_user.yml
+  -FabSim3/deploy/machines.yml
+  -FabSim3/plugins/FabSCEMa/machines_FabSCEMa_user.yml
+  
+```
+
+run the following:
+
+```
+  -  fabsim   localhost   SCEMa_init_run_analyse_campaign_local:fabSCEMa_easyvvuq_easysurrogate_InRuAn1_DAS_QCGPJ
+  -  fabsim   <remote machine name>   SCEMa_init_run_analyse_campaign_remote:fabSCEMa_easyvvuq_easysurrogate_InRuAn1_DAS_QCGPJ
+  -  fabsim   localhost   SCEMa_init_run_analyse_campaign_local:fabSCEMa_easyvvuq_easysurrogate_InRuAn2_DAS_QCGPJ
+  -  fabsim   <remote machine name>   SCEMa_init_run_analyse_campaign_remote:fabSCEMa_easyvvuq_easysurrogate_InRuAn2_DAS_QCGPJ
+
+```
+
+and copy the results back to your local machine with
+
+```
+ -  fabsim  localhost   fetch_results
+ -  fabsim  <remote machine name>   fetch_results
+```
+
 
