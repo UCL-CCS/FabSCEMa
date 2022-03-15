@@ -62,11 +62,13 @@ eagle_hidalgo:
   job_wall_time : "0-0:10:00"
   partition_name: "fast"
 
+  fabric_dir: "FabMD_tests"
+
   py_pkg: *PY_PKG
 
   modules:
     # list of modules to be loaded on remote machine
-    loaded: ["python/3.7.3", "openmpi/4.0.0_gcc620"]
+    loaded: ["python/3.7.3", "openmpi/4.0.0_gcc620", "namd/2.12-verbs-smp", "lammps/15Apr2020", "gromacs/2018_mpi", "amber/16"]
     # list of modules to be unloaded on remote machine
     unloaded: ["python"]  
 
@@ -80,7 +82,7 @@ eagle_vecma:
 
   modules:
     # list of modules to be loaded on remote machine
-    loaded: ["openmpi/4.0.0_gcc620"]
+    loaded: ["openmpi/4.0.0_gcc620", "lammps/15Apr2020", "gromacs/2018_mpi", "namd", "amber"]
     # list of modules to be unloaded on remote machine
     unloaded: ["python"]
 
@@ -110,7 +112,8 @@ ohm:
   SCEMa_exec: "/Users/kevinbronik/build/dealammps"
   cores: 2
 
- 
+      # list of modules to be loaded on remote machine
+#      loaded: [ "lammps/13Apr17/intel-2017", "gromacs/2018/intel-2017", "fftw/2.1.5/intel-2015-update2", "namd/2.12/intel-2018-update3" ]
 
 Kathleen:
     # location of lmp_serial on the remote machine
@@ -119,7 +122,7 @@ Kathleen:
 
   modules:
       # list of modules to be loaded on remote machine
-      loaded: [ "python/3.7.4"]
+      loaded: [ "python/3.7.4", "lammps/16Mar18/userintel/intel-2018", "gromacs/2018/intel-2017", "fftw/2.1.5/intel-2015-update2", "namd/2.12/intel-2018-update3" ]
 
 
 
