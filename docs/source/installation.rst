@@ -76,18 +76,18 @@ FabSCEMa Installation
    :class: with-shadow
    :scale: 60
 
-Before being able to run FabSCEMa [with the assumption that you have been able to run the basic FabSim examples described in the other documentation files, and that you have configured and built Nektar++ (https://www.nektar.info/) on the target machine, and  successfully tested the executable code!], you should install FabNEPTUNE inside of FabSim3. This will  provide functionality to extend FabSim3's workflow and remote submission capabilities to NEPTUNE specific tasks. 
+Before being able to run FabSCEMa [with the assumption that you have been able to run the basic FabSim examples described in the other documentation files, and that you have configured and built SCEMa (https://github.com/UCL-CCS/SCEMa) on the target machine, and  successfully tested the executable code!], you should install FabSCEMa inside of FabSim3. This will  provide functionality to extend FabSim3's workflow and remote submission capabilities to NEPTUNE specific tasks. 
 
 * To install FabSim3 tool, please follow the installation from https://fabsim3.readthedocs.io/en/latest/installation.html
 
-* To install FabNEPTUNE plugin, simple type:
+* To install FabSCEMa plugin, simple type:
 
     .. code-block:: console
 		
-		fabsim localhost install_plugin:FabNEPTUNE
+		fabsim localhost install_plugin:FabSCEMa
 		
 		
-After installation of FabNEPTUNE the following need to be done.
+After installation of FabSCEMa the following need to be done.
 
 Custom Environments 
 ==================
