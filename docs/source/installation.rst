@@ -3,19 +3,19 @@
 .. Installation
 .. ============
 
-Nektar++ configuration and build
+SCEMa configuration and build
 ===================
 
-In the following we will provide an example on how to configure and build Nektar++ on a remote machine.
+In the following we will provide an example on how to configure and build SCEMa on a remote machine.
 
 
-Nektar++ on ARCHER2
+SCEMa on ARCHER2
 ===================
 
 
-.. image:: ../../images/Nkk.png
-   :alt: Nektar++
-   :target: https://www.nektar.info/
+.. image:: ../../images/logo_SCEMa.png
+   :alt: SCEMa
+   :target: https://github.com/UCL-CCS/FabSCEMa
    :class: with-shadow
    :scale: 50
 
