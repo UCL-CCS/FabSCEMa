@@ -17,7 +17,7 @@ SCEMa on ARCHER2
    :alt: SCEMa
    :target: https://github.com/UCL-CCS/FabSCEMa
    :class: with-shadow
-   :scale: 50
+   :scale: 20
 
 
 After being successfully logged into the cluster, first export the following and load modules:
