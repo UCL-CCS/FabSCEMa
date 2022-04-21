@@ -1,6 +1,6 @@
 # FabSCEMa
 <br>
- <img height="200" src="logo_fs.png"/>
+ <img height="200" src="logo_FabSCEMa.png"/>
 </br>
 
 # How to run a SCEMa (test) Job
