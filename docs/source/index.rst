@@ -1,12 +1,12 @@
-.. FabNEPTUNE documentation master file, created by
+.. FabSCEMa documentation master file, created by
    sphinx-quickstart on Fri Mar 19 10:32:30 2021.
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Welcome to FabNEPTUNE's documentation!
+Welcome to FabSCEMa's documentation!
 =================================
 
-FabNEPTUNE is a `FabSim3 <https://github.com/djgroen/FabSim3>`_ plugin for automated ``NEPTUNE(UKAEA’s fusion project in the UK)``-based simulations.
+FabSCEMa is a `FabSim3 <https://github.com/djgroen/FabSim3>`_ plugin for automated `SCEMa <https://github.com/UCL-CCS/SCEMa>`_ simulations.
 
 This plugin provides functionality to extend FabSim3’s workflow and local/remote submission capabilities to NEPTUNE specific tasks.
 
@@ -17,7 +17,7 @@ This plugin provides functionality to extend FabSim3’s workflow and local/remo
    installation
 
 .. toctree::
-   :caption: FabNEPTUNE Workflow 
+   :caption: FabSCEMa Workflow 
    :maxdepth: 1
 
    workflow
