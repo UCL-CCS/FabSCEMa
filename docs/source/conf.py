@@ -21,8 +21,8 @@ sys.path.insert(0, os.path.abspath('.'))
 # -- Project information -----------------------------------------------------
 
 project = 'FabSCEMa'
-copyright = '2022, Kevin Bronik, Derek Groen, Maxime Vassaux, Werner Müller'
-author = 'Kevin Bronik, Derek Groen, Maxime Vassaux, Werner Müller'
+copyright = '2022, Kevin Bronik, Derek Groen, Maxime Vassaux, Werner Müller Roa'
+author = 'Kevin Bronik, Derek Groen, Maxime Vassaux, Werner Müller Roa'
 
 # The short X.Y version
 version = ''
@@ -111,6 +111,6 @@ latex_elements = {
 
 latex_documents = [
     (master_doc, 'FabSCEMa.tex', 'FabSCEMa Documentation',
-     'Kevin Bronik, Derek Groen, Maxime Vassaux, Werner Müller', 'manual'),
+     'Kevin Bronik, Derek Groen, Maxime Vassaux, Werner Müller Roa', 'manual'),
 ]
 '''
