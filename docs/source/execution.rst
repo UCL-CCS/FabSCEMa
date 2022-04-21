@@ -2,19 +2,20 @@
 
 This document briefly details how user/developers can set up a remote machine on FabSim3 for job submission.
 
-How to run a Convection2D and Convection3D (test) Jobs
+How to run a SCEMa (test) Job
 =======================
 
-These examples assume that you have been able to run the basic FabSim examples described in the other documentation files, and that you have built and configured Nektar++ (https://www.nektar.info/) on the target machine, also will be assumed that the location (``Convection2D_exec``) has been specified in the file ``machines_FabNEPTUNE_user.yml``.
+These examples assume that you have been able to run the basic FabSim examples described in the other documentation files, and that you have built and configured SCEMa (https://github.com/UCL-CCS/SCEMa) on the target machine.
 
-All the input files required for a Convection2D simulation should be contained in a directory in ``config_files``.
+All the input files required for a SCEMa simulation should be contained in a directory in ``config_files``.
 
 
-A minimal example Convection2D simulation is provided in ``config_files/Convection2d_test1``, to execute this example type:
+Two minimal example Convection2D simulation is provided in ``config_files/SCEMa_test1`` and ``config_files/SCEMa_test2`` to execute these examples type:
 
     .. code-block:: console
 		
-		fabsim localhost Convection2D_local:convection_2d_test	
+		fabsim localhost SCEMa:SCEMa_test1
+		fabsim localhost SCEMa:SCEMa_test2
 
 
 
@@ -22,48 +23,47 @@ A minimal example Convection2D simulation is provided in ``config_files/Convecti
 Run Ensemble Examples
 =====================
 
-Convection2D_ensemble
+SCEMa_ensemble_example1
 ------------------------
-These examples assume that you have been able to run the basic FabSim examples described in the other documentation files, and that you have built and configured Nektar++ (https://www.nektar.info/) on the target machine.
+This example will assume that you have been able to run the basic FabSim examples described in the other documentation files, and that you have built and configured SCEMa (https://github.com/UCL-CCS/SCEMa) on the target machine.
 
 To run type:
 
     .. code-block:: console
 		
-		fabsim localhost Convection2D_ensemble_local:Convection2D_ensemble_example
+		fabsim localhost SCEMa_ensemble:SCEMa_ensemble_example1
+		
+This example runs 3 simulations with different input files, which vary the simulation temperature, using the same topology file.
 
-FabNEPTUNE looks for a directory called ``Convection2D_ensemble_example`` in ``config_files``. It then looks for a sweep directory (by default called ``SWEEP``) that contains a number of input files to iterate through. All the files in ``Convection2D_ensemble_example`` directory and one of the sweep directory files will be copied to the host in separate directories (one for each sweep file) and executed in the normal way. This example runs 3 simulations with different input files, which vary the simulation timestep, using the same topology file.
 
-
-Convection3D_ensemble
+SCEMa_ensemble_example2
 ------------------------
-
-These examples assume that you have been able to run the basic FabSim examples described in the other documentation files, and that you have built and configured Nektar++ (https://www.nektar.info/) on the target machine.
+This example will assume that you have been able to run the basic FabSim examples described in the other documentation files, and that you have built and configured SCEMa (https://github.com/UCL-CCS/SCEMa) on the target machine.
 
 To run type:
 
     .. code-block:: console
 		
-		fabsim <remote machine name>  Convection3D_ensemble_remote:Convection3D_ensemble_example
+		fabsim localhost  SCEMa_ensemble:SCEMa_ensemble_example2
 
 
 
-FabNEPTUNE looks for a directory called ``Convection3D_ensemble_example`` in ``config_files``. It then looks for a sweep directory (by default called ``SWEEP``) that contains a number of input files to iterate through. All the files in ``Convection3D_ensemble_example`` directory and one of the sweep directory files will be copied to the host in separate directories (one for each sweep file) and executed in the normal way. This example runs 3 simulations with different input files, which vary the simulation timestep, using the same topology file.
+This example runs 6 simulations with different input files, which vary the simulation timestep, using the same topology file.
 		
 
-EasyVVUQ+FabNEPTUNE
+EasyVVUQ+FabSCEMa
 ===================
 
-These examples assume that you have been able to run the basic FabSim examples described in the other documentation files, and that you have built and configured Nektar++ (https://www.nektar.info/) on the target machine.
+These examples assume that you have been able to run the basic FabSim examples described in the other documentation files, and that you have built and configured SCEMa (https://github.com/UCL-CCS/SCEMa) on the target machine.
 
 .. Note:: All the easyvvuq campaign runs and  execution, and the results analyse will be done on target machine which can be your localhost or remote HPC machine.
 
-The input files needed for this example are found in ``plugins/FabNEPTUNE/config_files/convection_2d_easyvvuq_InRuAn*_QCGPJ``. This directory contains the following files that can be modified for your own purpose:
+The input files needed for this example are found in ``plugins/FabSCEMa/config_files/fabSCEMa_easyvvuq_InRuAn*_QCGPJ``. This directory contains the following files that can be modified for your own purpose:
 
 
-* ``convection_2d_remote.template``: is the convection2d input script in ``convection_2d_easyvvuq_InRuAn*_QCGPJ`` subfolder, EasyVVUQ will substitute certain variables in this file to create the ensemble.
+* ``SCEMa_remote.template``: is the convection2d input script in ``fabSCEMa_easyvvuq_InRuAn*_QCGPJ`` subfolder, EasyVVUQ will substitute certain variables in this file to create the ensemble.
 
-* ``campaign_params_remote.yml``: is the configuration file, in ``convection_2d_easyvvuq_InRuAn*_QCGPJ`` subfolder, for EasyVVUQ sampler. If you need different sampler, parameter to be varied, or polynomial order, you can set them in this file.
+* ``campaign_params_remote.yml``: is the configuration file, in ``fabSCEMa_easyvvuq_InRuAn*_QCGPJ`` subfolder, for EasyVVUQ sampler. If you need different sampler, parameter to be varied, or polynomial order, you can set them in this file.
 
 Execution
 ---------
@@ -81,8 +81,8 @@ To run type:
 
     .. code-block:: console
 		
-               fabsim   localhost   Convection2D_init_run_analyse_campaign_local:convection_2d_easyvvuq_InRuAn*_QCGPJ
-               fabsim   <remote machine name>   Convection2D_init_run_analyse_campaign_remote:convection_2d_easyvvuq_InRuAn*_QCGPJ
+               fabsim   localhost   SCEMa_init_run_analyse_campaign_local:fabSCEMa_easyvvuq_InRuAn1_QCGPJ
+               fabsim   <remote machine name>   SCEMa_init_run_analyse_campaign_remote:fabSCEMa_easyvvuq_InRuAn1_QCGPJ
 	       
 To copy the results back to your local machine type:
 
@@ -92,20 +92,20 @@ To copy the results back to your local machine type:
 	       fabsim  <remote machine name>   fetch_results
 	       
 	      
-EasyVVUQ+EasySurrogate+FabNEPTUNE
+EasyVVUQ+EasySurrogate+FabSCEMa
 =================================
 
-These examples assume that you have been able to run the basic FabSim examples described in the other documentation files, and that you have built and configured Nektar++ (https://www.nektar.info/) on the target machine.
+These examples assume that you have been able to run the basic FabSim examples described in the other documentation files, and that you have built and configured SCEMa (https://github.com/UCL-CCS/SCEMa) on the target machine.
 
 .. Note:: All the EasyVVUQ and EasySurrogate campaigns runs and execution, and the results analyse will be done on target machine which can be your localhost or remote HPC machine.
 
 
-The input files needed for this example are found in ``plugins/FabNEPTUNE/config_files/convection_2d_easyvvuq_easysurrogate_InRuAn*_DAS_QCGPJ``. This directory contains the following files that can be modified for your own purpose:
+The input files needed for this example are found in ``plugins/FabSCEMa/config_files/fabSCEMa_easyvvuq_easysurrogate_InRuAn*_DAS_QCGPJ``. This directory contains the following files that can be modified for your own purpose:
 
 
-* ``convection_2d_remote.template``: is the convection2d input script in ``convection_2d_easyvvuq_easysurrogate_InRuAn*_DAS_QCGPJ`` subfolder, EasyVVUQ will substitute certain variables in this file to create the ensemble.
+* ``SCEMa_remote.template``: is the convection2d input script in ``fabSCEMa_easyvvuq_easysurrogate_InRuAn*_DAS_QCGPJ`` subfolder, EasyVVUQ will substitute certain variables in this file to create the ensemble.
 
-* ``campaign_params_remote.yml``: is the configuration file, in ``convection_2d_easyvvuq_easysurrogate_InRuAn*_DAS_QCGPJ`` subfolder, for EasyVVUQ sampler. If you need different sampler, parameter to be varied, or polynomial order, you can set them in this file.
+* ``campaign_params_remote.yml``: is the configuration file, in ``fabSCEMa_easyvvuq_easysurrogate_InRuAn*_DAS_QCGPJ`` subfolder, for EasyVVUQ sampler. If you need different sampler, parameter to be varied, or polynomial order, you can set them in this file.
 
 Execution
 ---------
@@ -123,10 +123,10 @@ To run type:
 
     .. code-block:: console
 		
-               fabsim   localhost   Convection2D_init_run_analyse_campaign_local:convection_2d_easyvvuq_easysurrogate_InRuAn1_DAS_QCGPJ
-               fabsim   <remote machine name>   Convection2D_init_run_analyse_campaign_remotel:convection_2d_easyvvuq_easysurrogate_InRuAn1_DAS_QCGPJ
-	       fabsim   localhost   Convection2D_init_run_analyse_campaign_local:convection_2d_easyvvuq_easysurrogate_InRuAn2_DAS_QCGPJ
-	       fabsim   <remote machine name>   Convection2D_init_run_analyse_campaign_remote:convection_2d_easyvvuq_easysurrogate_InRuAn2_DAS_QCGPJ
+               fabsim   localhost   SCEMa_init_run_analyse_campaign_local:fabSCEMa_easyvvuq_easysurrogate_InRuAn1_DAS_QCGPJ
+               fabsim   <remote machine name>   SCEMa_init_run_analyse_campaign_remote:fabSCEMa_easyvvuq_easysurrogate_InRuAn1_DAS_QCGPJ
+	       fabsim   localhost   SCEMa_init_run_analyse_campaign_local:fabSCEMa_easyvvuq_easysurrogate_InRuAn2_DAS_QCGPJ
+	       fabsim   <remote machine name>   SCEMa_init_run_analyse_campaign_remote:fabSCEMa_easyvvuq_easysurrogate_InRuAn2_DAS_QCGPJ
 	       
 To copy the results back to your local machine type:
 
