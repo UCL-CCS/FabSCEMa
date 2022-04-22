@@ -85,4 +85,6 @@ and copy the results back to your local machine with
  -  fabsim  <remote machine name>   fetch_results
 ```
 
-
+<p align="center" width="100%">
+ <img height="200" src="images/important.png"/>
+</p> 
