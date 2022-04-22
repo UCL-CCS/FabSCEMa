@@ -46,7 +46,7 @@ html_static_path = ['_static']
 master_doc = 'index'
 
 # -- Options for HTML output -------------------------------------------------
-html_logo = "../../logo_FabSCEMa.png"
+html_logo = "../../FabSCEMa_logo.png"
 
 # -- Options for HTMLHelp output ---------------------------------------------
 
