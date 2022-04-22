@@ -70,7 +70,7 @@ For more detailed approach please visit:
 
 FabSCEMa Installation
 ==================
-.. image:: ../../logo_FabSCEMa.png
+.. image:: ../../FabSCEMa_logo.png
    :alt: FabSCEMa
    :target: https://github.com/UCL-CCS/FabSCEMa
    :class: with-shadow
