@@ -180,49 +180,41 @@ From within the SCEMa directory, run the following commands
 	cp CMakeLists/example_machine.CMakeLists.txt CMakeLists.txt
 	
 Where the file CMakeLists.txt needs to be edited to point toward the right installation path, which might look like the following
+
            .. code-block:: bash
 	   
-	         #!/bin/bash
-                 ## slurm-archer2
-                 ## number of nodes
-                 #SBATCH --nodes 70
+                       CMAKE_MINIMUM_REQUIRED(VERSION 3.21)
 
-                 ## SBATCH --nodes $nodes
-                 #SBATCH --ntasks=8960
-                 ## task per node
-                 #SBATCH --tasks-per-node=$corespernode
-                 #SBATCH --cpus-per-task=1
-                 ## wall time in format MINUTES:SECONDS
-                 #SBATCH --time=$job_wall_time
+                       set(CMAKE_C_COMPILER "cc")
+                       set(CMAKE_CXX_COMPILER "CC")
 
+                       PROJECT(dealammps LANGUAGES CXX)
 
-                 ## grant
-                 #SBATCH --account=$budget
+                       FIND_PACKAGE(deal.II 9.0.1 REQUIRED
+                       HINTS /work/yours/bin/deal.II
+                           )
+                       DEAL_II_INITIALIZE_CACHED_VARIABLES()
 
-                 ## stdout file
-                 #SBATCH --output=$job_results/JobID-%j.output
+                       ADD_EXECUTABLE(dealammps dealammps.cc)
+                       DEAL_II_SETUP_TARGET(dealammps)
 
-                 ## stderr file
-                 #SBATCH --error=$job_results/JobID-%j.error
+                       INCLUDE_DIRECTORIES(
+                       /work/yours/lammps-17Nov16/src
+                       /opt/cray/pe/python/default/include/python3.8
+                       )
 
-                 #SBATCH --partition=$partition_name
-                 #SBATCH --qos=$qos_name
+                       TARGET_LINK_LIBRARIES(dealammps /work/yours/lammps-17Nov16/src/liblammps.so)
+                       TARGET_LINK_LIBRARIES(dealammps /opt/cray/pe/python/default/lib/libpython3.8.so)
 
-                 export OMP_NUM_THREADS=1
-                 export FI_MR_CACHE_MAX_COUNT=0
-                 export PATH="/mnt/lustre/a2fs-work2/work/e723/e723/kevinb/miniconda3/bin:$PATH"
-                 export PATH="/mnt/lustre/a2fs-work2/work/e723/e723/kevinb/.local/.local/bin:$PATH"
-                 export NEK_DIR=/mnt/lustre/a2fs-work2/work/e723/e723/kevinb/nektarpp/build
-                 export NEK_BUILD=$NEK_DIR/dist/bin
-                 export LD_LIBRARY_PATH=/opt/gcc/10.2.0/snos/lib64:$NEK_DIR/ThirdParty/dist/lib:$NEK_DIR/dist/lib64:$LD_LIBRARY_PATH
-                 export PATH="/mnt/lustre/a2fs-work2/work/e723/e723/kevinb/nektarpp/build/dist/bin:$PATH"
+                       TARGET_LINK_LIBRARIES(dealammps LINK_PUBLIC ${Boost_LIBRARIES})
 		 
 		 
 Then run the following commands
      .. code-block:: console
      
+	mkdir /work/yours/bin/deal.II
 	cd build
-	cmake -DDEAL_II_DIR=/work/e723/e723/kevinb/bin/deal.II ../
+	cmake -DDEAL_II_DIR=/work/yours/bin/deal.II ../
 	
 Finally build SCEMa
     .. code-block:: console
