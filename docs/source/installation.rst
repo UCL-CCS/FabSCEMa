@@ -20,52 +20,77 @@ SCEMa on ARCHER2
    :scale: 5
 
 
-After being successfully logged into the cluster, first export the following and load modules:
+After being successfully logged into the cluster, first load the following modules:
 
     .. code-block:: console
 		
-		export CRAY_ADD_RPATH=yes
-                module swap PrgEnv-cray PrgEnv-gnu 
-                module load cray-fftw
-		module load cmake
+		module swap PrgEnv-cray PrgEnv-gnu
+                module load cmake cray-python 
 
 
-Enter the work directory (/work) and clone the Nektar++ code into a folder, e.g. nektarpp
+Then enter the work directory (/work) and download  petsc, dealii and lammps code into some folders
 
     .. code-block:: console
 		
-		cd /work/e01/e01/mlahooti
-                git clone https://gitlab.nektar.info/nektar/nektar.git nektarpp 
+		wget https://ftp.mcs.anl.gov/pub/petsc/release-snapshots/petsc-3.16.2.tar.gz
+                wget https://github.com/dealii/dealii/releases/download/v9.0.1/dealii-9.0.1.tar.gz
+		wget https://download.lammps.org/tars/lammps-17Nov2016.tar.gz
 
 
-After the code is cloned, enter the nektarpp folder, make a build directory and enter it
+After the codes are cloned, unpack them
     .. code-block:: console
 		
-		cd nektarpp
-                mkdir build
-                cd build
+		tar -xvf petsc-3.16.2.tar.gz
+                tar -xvf dealii-9.0.1.tar.gz
+                tar -xvf lammps-17Nov2016.tar.gz
 
+Build petsc
+-----------
 
-From within the build directory, run the configure command. Note the use of CC and CXX to select the special ARCHER-specific compilers.
+From within the petsc directory, run the following configure command
     .. code-block:: console
 		
-	CC=cc CXX=CC cmake -DNEKTAR_USE_SYSTEM_BLAS_LAPACK=OFF -DNEKTAR_USE_MPI=ON -DNEKTAR_USE_HDF5=ON -DNEKTAR_USE_FFTW=ON -DTHIRDPARTY_BUILD_BOOST=ON -DTHIRDPARTY_BUILD_HDF5=ON ..
-
-
-cc and CC are the C and C++ wrappers for the Cray utilities and determined by the PrgEnv module.
-SYSTEM_BLAS_LAPACK is disabled since, by default, we can use the libsci package which contains an optimized version of BLAS and LAPACK and not require any additional arguments to cc.
-HDF5 is a better output option to use on ARCHER2 since often we run out of the number of files limit on the quota. Setting this option from within ccmake has led to problems however so make sure to specify it on the cmake command line as above. Further, the HDF5 version on the ARCHER2 is not supported at the moment, so here it is built as a third-party library.
-They are currently not using the system boost since it does not appear to be using C++11 and so causing compilation errors.
-At this point you can run ccmake .. to e.g. disable unnecessary solvers. Now run make as usual to compile the code
-
+	./configure --with-cc=cc --with-cxx=CC --with-fc=ftn
+	
+And then build petsc
     .. code-block:: console
 		
-		make -j 4 install
+	make PETSC_DIR=/work/yours/petsc-3.16.2 PETSC_ARCH=arch-linux-c-debug all
+	make PETSC_DIR=/work/yours/petsc-3.16.2 PETSC_ARCH=arch-linux-c-debug check
+	
+Build deal.II
+-----------
+
+From within the deal.II directory, run the following configure command
+    .. code-block:: console
+		
+	CC=cc CXX=CC FC=ftn cmake -DCMAKE_INSTALL_PREFIX=/work/yours/bin/deal.II -DDEAL_II_WITH_MPI=ON -DDEAL_II_WITH_PETSC=ON -DPETSC_DIR=/work/yours/petsc-3.16.2 -DPETSC_ARCH=arch-linux-c-debug  -DDEAL_II_WITH_LAPACK=OFF ..
+	
+And then build deal.II
+    .. code-block:: console
+		
+	make install (make -j 4 install)
+	make test	
+
+Build Lammps
+-----------
+
+From within the deal.II directory, run the following configure command
+    .. code-block:: console
+		
+	CC=cc CXX=CC FC=ftn cmake -DCMAKE_INSTALL_PREFIX=/work/yours/bin/deal.II -DDEAL_II_WITH_MPI=ON -DDEAL_II_WITH_PETSC=ON -DPETSC_DIR=/work/yours/petsc-3.16.2 -DPETSC_ARCH=arch-linux-c-debug  -DDEAL_II_WITH_LAPACK=OFF ..
+	
+And then build petsc
+    .. code-block:: console
+		
+	make install (make -j 4 install)
+	make test
+	
 
 For more detailed approach please visit:
     .. code-block:: console
 		
-		https://www.nektar.info/nektar-on-archer2/
+		https://github.com/hpc-uk/build-instructions/blob/main/apps/LAMMPS/build_lammps_15Oct2020_gcc930.md
     
 
 FabSCEMa Installation
