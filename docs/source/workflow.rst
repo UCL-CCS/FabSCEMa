@@ -1,7 +1,7 @@
 .. _workflow:
 
 
-FabNEPTUNE Workflow
+FabSCEMa Workflow
 ==============
 
 Introduction
@@ -9,9 +9,9 @@ Introduction
 FabNEPTUNE is a tool that allows for the easy execution of NEPTUNE project simulations (especially convection2d and convection3d) in local or remote machines. This section of the documentation will cover an example of how one would go about configuring FabNEPTUNE and running a simulation using any NEPTUNE project code (any implemented NEPTUNE project inside FabNEPTUNE).
 
 
-Example of workflow for FabNEPTUNE (convection2d and convection3d)
+Example of workflow for FabSCEMa
 ------------------------------------------------------------------
-An already implemented example from FabNEPTUNE's projects will be explained in the following 
+An already implemented example from FabSCEMa's project will be explained in the following 
 
 Convection2d and convection3d
 -----------------------------
@@ -56,7 +56,7 @@ References
 		[1] J.W. Elder, Turbulent free convection in a vertical slot, J. Fluid Mech. (1965) vol.23 part 1 pp.99-111.
     
     
-Submitting convection2d and convection3d jobs
+Submitting  job
 ------------------------------------------------------------------
 
 Before submitting the simulation to a remote machine, two YAML files must be edited. First we need to modify the file
