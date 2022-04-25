@@ -71,7 +71,56 @@ And then build deal.II
     .. code-block:: console
 		
 	make install (make -j 4 install)
-	make test	
+	make test
+	
+
+All can be done using a job script, which might look like the following
+
+           .. code-block:: bash
+	   
+                     #!/bin/bash
+
+                     #SBATCH --job-name=build
+                     #SBATCH --nodes=1
+                     #SBATCH --tasks-per-node=128
+                     #SBATCH --cpus-per-task=1
+                     #SBATCH --time=5:05:00
+
+                     #SBATCH --account=yours
+                     #SBATCH --partition=standard
+                     #SBATCH --qos=standard
+ 
+                     # modules
+                     module swap PrgEnv-cray PrgEnv-gnu
+                     module load cmake cray-python
+
+                     echo $SLURM_SUBMIT_DIR
+
+                     # Download
+                     wget https://ftp.mcs.anl.gov/pub/petsc/release-snapshots/petsc-3.16.2.tar.gz
+                     wget https://github.com/dealii/dealii/releases/download/v9.0.1/dealii-9.0.1.tar.gz
+                     wget https://download.lammps.org/tars/lammps-17Nov2016.tar.gz
+
+                     # Unpack
+                     tar -xvf petsc-3.16.2.tar.gz
+                     tar -xvf dealii-9.0.1.tar.gz
+                     tar -xvf lammps-17Nov2016.tar.gz
+
+                     # Build PETSc
+                     cd /work/yours/petsc-3.16.2
+                     ./configure --with-cc=cc --with-cxx=CC --with-fc=ftn
+                     make PETSC_DIR=/work/yours/petsc-3.16.2 PETSC_ARCH=arch-linux-c-debug all
+                     make PETSC_DIR=/work/yours/petsc-3.16.2 PETSC_ARCH=arch-linux-c-debug check
+                     cd ..
+
+
+                     # Build deal.II
+                     cd /work/yours/dealii-9.0.1/build
+                     CC=cc CXX=CC FC=ftn cmake -DCMAKE_INSTALL_PREFIX=/work/yours/bin/deal.II -DDEAL_II_WITH_MPI=ON -DDEAL_II_WITH_PETSC=ON -    
+		     DPETSC_DIR=/work/yours/petsc-3.16.2 -DPETSC_ARCH=arch-linux-c-debug  -DDEAL_II_WITH_LAPACK=OFF ..
+                     make install
+                     make test
+                     cd ../..	
 
 Build LAMMPS
 ------------
