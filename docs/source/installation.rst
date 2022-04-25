@@ -26,6 +26,7 @@ After being successfully logged into the cluster, first load the following modul
 		
 		module swap PrgEnv-cray PrgEnv-gnu
                 module load cmake cray-python 
+		module load cray-fftw
 
 
 Then enter the work directory (/work) and download  petsc, dealii and lammps code into some folders
@@ -72,22 +73,44 @@ And then build deal.II
 	make install (make -j 4 install)
 	make test	
 
-Build Lammps
+Build LAMMPS
 -----------
 
-From within the deal.II directory, run the following configure command
+From within the LAMMPS directory, move to the src/ directory
     .. code-block:: console
 		
-	CC=cc CXX=CC FC=ftn cmake -DCMAKE_INSTALL_PREFIX=/work/yours/bin/deal.II -DDEAL_II_WITH_MPI=ON -DDEAL_II_WITH_PETSC=ON -DPETSC_DIR=/work/yours/petsc-3.16.2 -DPETSC_ARCH=arch-linux-c-debug  -DDEAL_II_WITH_LAPACK=OFF ..
+	create MAKE/MACHINE/Makefile.archer2
+	cp MAKE/Makefile.mpi MAKE/MACHINES/Makefile.archer2
 	
-And then build petsc
+Then edit the following in MAKE/MACHINES/Makefile.archer2
     .. code-block:: console
 		
-	make install (make -j 4 install)
-	make test
+	CC =		CC
+        CCFLAGS =	-O3 -Wrestrict
+        LINK =.         CC
+        LINKFLAGS =.    -O
+        LIB = 		-lstdc++
+        LMP_INC =	-DLAMMPS_GZIP
+        MPI_INC =       -DMPICH_SKIP_MPICXX
+        FFT_INC=        -DFFT_FFTW3
+        FFT_LIB=        -lfftw3
+		 
+And then build LAMMPS 
+    .. code-block:: console
+		
+	make yes-asphere yes-body yes-class2 \
+        yes-colloid yes-compress \
+        yes-coreshell yes-dipole yes-granular \
+        yes-kspace yes-manybody yes-mc \
+        yes-misc yes-molecule yes-opt \
+        yes-peri yes-qeq yes-replica \
+        yes-rigid yes-shock yes-snap \
+        yes-srd
+	
+	make -j 8 archer2
 	
 
-For more detailed approach please visit:
+This will create the lmp_archer2 executable. For more detailed approach please visit:
     .. code-block:: console
 		
 		https://github.com/hpc-uk/build-instructions/blob/main/apps/LAMMPS/build_lammps_15Oct2020_gcc930.md
