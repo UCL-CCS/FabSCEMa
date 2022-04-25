@@ -60,7 +60,7 @@ And then build petsc
 	make PETSC_DIR=/work/yours/petsc-3.16.2 PETSC_ARCH=arch-linux-c-debug check
 	
 Build deal.II
------------
+-------------
 
 From within the deal.II directory, run the following configure command
     .. code-block:: console
@@ -74,7 +74,7 @@ And then build deal.II
 	make test	
 
 Build LAMMPS
------------
+------------
 
 From within the LAMMPS directory, move to the src/ directory
     .. code-block:: console
@@ -114,7 +114,40 @@ This will create the lmp_archer2 executable. For more detailed approach please v
     .. code-block:: console
 		
 		https://github.com/hpc-uk/build-instructions/blob/main/apps/LAMMPS/build_lammps_15Oct2020_gcc930.md
-    
+		
+		
+Build SCEMa
+------------
+Within the work directory (/work) clone SCEMa
+
+    .. code-block:: console
+          
+	  git clone https://github.com/UCL-CCS/SCEMa.git
+
+From within the SCEMa directory, run the following commands
+    .. code-block:: console
+		
+	mkdir build
+	cp CMakeLists/example_machine.CMakeLists.txt CMakeLists.txt
+	
+Where the file CMakeLists.txt needs to be edited to point toward the right installation path, which might look like the following
+
+
+Then run the following commands
+     .. code-block:: console
+     
+	cd build
+	cmake -DDEAL_II_DIR=/work/e723/e723/kevinb/bin/deal.II ../
+	
+Finally build SCEMa
+    .. code-block:: console
+		
+	make dealammps
+
+This will create the dealammps executable. For more detailed approach please visit:
+    .. code-block:: console
+		
+		https://github.com/UCL-CCS/SCEMa	   
 
 FabSCEMa Installation
 ==================
@@ -128,7 +161,7 @@ Before being able to run FabSCEMa [with the assumption that you have been able t
 
 * To install FabSim3 tool, please follow the installation from https://fabsim3.readthedocs.io/en/latest/installation.html
 
-* To install FabSCEMa plugin, simple type:
+* To install FabSCEMa plugin, Simply Type:
 
     .. code-block:: console
 		
