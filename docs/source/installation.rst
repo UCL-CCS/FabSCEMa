@@ -131,8 +131,44 @@ From within the SCEMa directory, run the following commands
 	cp CMakeLists/example_machine.CMakeLists.txt CMakeLists.txt
 	
 Where the file CMakeLists.txt needs to be edited to point toward the right installation path, which might look like the following
+           .. code-block:: bash
+	   
+	         #!/bin/bash
+                 ## slurm-archer2
+                 ## number of nodes
+                 #SBATCH --nodes 70
+
+                 ## SBATCH --nodes $nodes
+                 #SBATCH --ntasks=8960
+                 ## task per node
+                 #SBATCH --tasks-per-node=$corespernode
+                 #SBATCH --cpus-per-task=1
+                 ## wall time in format MINUTES:SECONDS
+                 #SBATCH --time=$job_wall_time
 
 
+                 ## grant
+                 #SBATCH --account=$budget
+
+                 ## stdout file
+                 #SBATCH --output=$job_results/JobID-%j.output
+
+                 ## stderr file
+                 #SBATCH --error=$job_results/JobID-%j.error
+
+                 #SBATCH --partition=$partition_name
+                 #SBATCH --qos=$qos_name
+
+                 export OMP_NUM_THREADS=1
+                 export FI_MR_CACHE_MAX_COUNT=0
+                 export PATH="/mnt/lustre/a2fs-work2/work/e723/e723/kevinb/miniconda3/bin:$PATH"
+                 export PATH="/mnt/lustre/a2fs-work2/work/e723/e723/kevinb/.local/.local/bin:$PATH"
+                 export NEK_DIR=/mnt/lustre/a2fs-work2/work/e723/e723/kevinb/nektarpp/build
+                 export NEK_BUILD=$NEK_DIR/dist/bin
+                 export LD_LIBRARY_PATH=/opt/gcc/10.2.0/snos/lib64:$NEK_DIR/ThirdParty/dist/lib:$NEK_DIR/dist/lib64:$LD_LIBRARY_PATH
+                 export PATH="/mnt/lustre/a2fs-work2/work/e723/e723/kevinb/nektarpp/build/dist/bin:$PATH"
+		 
+		 
 Then run the following commands
      .. code-block:: console
      
@@ -161,7 +197,7 @@ Before being able to run FabSCEMa [with the assumption that you have been able t
 
 * To install FabSim3 tool, please follow the installation from https://fabsim3.readthedocs.io/en/latest/installation.html
 
-* To install FabSCEMa plugin, Simply Type:
+* To install FabSCEMa plugin, simply Type:
 
     .. code-block:: console
 		
@@ -330,13 +366,21 @@ Finally you need to create a new virtual environment, and update the following f
 
     .. code-block:: console
 		
-		easyvvuq_convection_2d_RUN_localhost.py
-                easyvvuq_convection_2d_RUN_remote.py
-		Convection2D_init_run_analyse_campaign_local
-		Convection2D_init_run_analyse_campaign_remote
+		easyvvuq_SCEMa_RUN_remote.py
+                easyvvuq_SCEMa_RUN_localhost.py
+		SCEMa_easyvvuq_init_run_analyse_local.py
+		SCEMa_easyvvuq_init_run_analyse_remote.py
+		SCEMa_init_run_analyse_campaign_local
+		SCEMa_init_run_analyse_campaign_remote
 
 
-which  are found in ``plugins/FabNEPTUNE/config_files/convection_2d_easyvvuq_InRuAn*_QCGPJ`` and ``plugins/FabNEPTUNE/config_files/convection_2d_easyvvuq_easysurrogate_InRuAn*_DAS_QCGPJ`` and ``plugins/FabNEPTUNE/templates``
+which are found in 
+
+``plugins/FabSCEMa/config_files/fabSCEMa_easyvvuq_InRuAn*_QCGPJ``
+``plugins/FabSCEMa/config_files/fabSCEMa_easyvvuq_easysurrogate_InRuAn*_DAS_QCGPJ``   
+``plugins/FabSCEMa/config_files/fabSCEMa_easyvvuq_easysurrogate_InRuAn_GP_QCGPJ``
+``plugins/FabSCEMa/config_files/fabSCEMa_easyvvuq_easysurrogate_InRuAn_QSN_QCGPJ``
+``plugins/FabSCEMa/templates``
 
 This environment is used by EasyVVUQ campaign. 
 
