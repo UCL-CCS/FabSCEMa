@@ -1,3 +1,8 @@
+[![GitHub issues](https://img.shields.io/github/issues/UCL-CCS/FabSCEMa)](https://github.com/UCL-CCS/FabSCEMa/issues)
+[![GitHub forks](https://img.shields.io/github/forks/UCL-CCS/FabSCEMa)](https://github.com/UCL-CCS/FabSCEMa/network)
+[![GitHub stars](https://img.shields.io/github/stars/UCL-CCS/FabSCEMa)](https://github.com/UCL-CCS/FabSCEMa/stargazers)
+
+
 # FabSCEMa
 <br>
  <img height="200" src="FabSCEMa_logo.png"/>
