@@ -93,6 +93,7 @@ All can be done using a job script, which might look like the following
                      # modules
                      module swap PrgEnv-cray PrgEnv-gnu
                      module load cmake cray-python
+		     module load cray-fftw
 
                      echo $SLURM_SUBMIT_DIR
 
@@ -234,7 +235,7 @@ FabSCEMa Installation
    :class: with-shadow
    :scale: 60
 
-Before being able to run FabSCEMa [with the assumption that you have been able to run the basic FabSim examples described in the other documentation files, and that you have configured and built SCEMa (https://github.com/UCL-CCS/SCEMa) on the target machine, and  successfully tested the executable code!], you should install FabSCEMa inside of FabSim3. This will  provide functionality to extend FabSim3's workflow and remote submission capabilities to NEPTUNE specific tasks. 
+Before being able to run FabSCEMa [with the assumption that you have been able to run the basic FabSim examples described in the other documentation files, and that you have configured and built SCEMa (https://github.com/UCL-CCS/SCEMa) on the target machine, and  successfully tested the executable code!], you should install FabSCEMa inside of FabSim3. This will  provide functionality to extend FabSim3's workflow and remote submission capabilities to SCEMa specific tasks. 
 
 * To install FabSim3 tool, please follow the installation from https://fabsim3.readthedocs.io/en/latest/installation.html
 
