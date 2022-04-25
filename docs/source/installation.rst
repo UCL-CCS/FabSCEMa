@@ -239,7 +239,7 @@ Before being able to run FabSCEMa [with the assumption that you have been able t
 
 * To install FabSim3 tool, please follow the installation from https://fabsim3.readthedocs.io/en/latest/installation.html
 
-* To install FabSCEMa plugin, simply Type:
+* To install FabSCEMa plugin, simply type:
 
     .. code-block:: console
 		
