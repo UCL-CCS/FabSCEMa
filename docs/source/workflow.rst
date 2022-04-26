@@ -24,6 +24,11 @@ macroscopic properties.
    :scale: 50
 
 
+
+Further information can be found in the following publication
+
+
+
 References
     .. code-block:: console
 		
