@@ -25,7 +25,7 @@ macroscopic properties.
 
 
 
-Further information can be found in the following publication
+Further information can be found in the following publication.
 
 
 
