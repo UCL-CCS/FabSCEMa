@@ -18,6 +18,11 @@ SCEMa (Simulation Coupling Environment for Materials)
 Mechanisms emerging across multiple scales are ubiquitous in physics and methods designed to investigate them are becoming essential. The heterogeneous multiscale method (HMM) is one of these, concurrently simulating the different scales while keeping them separate. Due to the significant computational expense, developments of HMM remain mostly theoretical and applications to physical problems are scarce. However, HMM is highly scalable and is well suited for high performance computing. With the wide availability of multi-petaflop infrastructures, HMM applications are becoming practical. Rare applications to mechanics of materials at low loading amplitudes exist, but are generally confined to the elastic regime. Beyond that, where history-dependent, irreversible or non-linear mechanisms occur, not only computational cost, but also data management issues arise. The microscale description loses generality, developing a specific microstructure based on the deformation history, which implies inter alia that as many microscopic models as discrete locations in the macroscopic description must be simulated and stored. Here we present a detailed description of the application of HMM to inelastic mechanics of materials, with emphasis on the efficiency and accuracy of the scale bridging methodology. The method is well-suited to the estimation of macroscopic properties of polymers (and derived nanocomposites) starting from knowledge of their atomistic chemical structure. Through application of the resulting workflow to polymer fracture mechanics, we demonstrate deviation in the predicted fracture toughness relative to a single scale molecular dynamics approach, thus illustrating the need for such concurrent multiscale methods in the predictive estimation of
 macroscopic properties.
 
+.. image:: ../../images/scema.png
+   :align: center
+   :class: with-shadow
+   :scale: 50
+
 References
     .. code-block:: console
 		
