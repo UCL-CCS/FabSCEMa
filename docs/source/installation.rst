@@ -155,7 +155,9 @@ And then build LAMMPS
         yes-misc yes-molecule yes-opt \
         yes-peri yes-qeq yes-replica \
         yes-rigid yes-shock yes-snap \
-        yes-srd
+        yes-srd \ 
+	yes-RIGID \
+        yes-USER-REAXC 
 	
 	make -j 8 archer2
 	
