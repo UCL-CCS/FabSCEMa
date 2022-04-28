@@ -132,7 +132,7 @@ From within the LAMMPS directory, move to the src/ directory
 	create MAKE/MACHINE/Makefile.archer2
 	cp MAKE/Makefile.mpi MAKE/MACHINES/Makefile.archer2
 	
-Then edit the following in MAKE/MACHINES/Makefile.archer2
+Then edit the following in MAKE/MACHINES/Makefile.archer2 (e.g. nano MAKE/MACHINES/Makefile.archer2)
     .. code-block:: console
 		
 	CC =		CC
@@ -148,18 +148,21 @@ Then edit the following in MAKE/MACHINES/Makefile.archer2
 And then build LAMMPS 
     .. code-block:: console
 		
-	make yes-asphere yes-body yes-class2 \
-        yes-colloid yes-compress \
-        yes-coreshell yes-dipole yes-granular \
-        yes-kspace yes-manybody yes-mc \
-        yes-misc yes-molecule yes-opt \
-        yes-peri yes-qeq yes-replica \
-        yes-rigid yes-shock yes-snap \
-        yes-srd \ 
-	yes-RIGID \
-        yes-USER-REAXC 
+        make yes-RIGID
+        make yes-USER-REAXC
+        make yes-asphere yes-body yes-class2
+        make yes-colloid yes-compress
+        make yes-coreshell yes-dipole yes-granular
+        make yes-kspace yes-manybody yes-mc
+        make yes-misc yes-molecule yes-opt
+        make yes-peri yes-qeq yes-replica
+        make yes-rigid yes-shock yes-snap
+        make yes-srd 
 	
 	make -j 8 archer2
+	make mode=print serial
+        make mode=shlib
+        make mode=shlib archer2
 	
 
 This will create the lmp_archer2 executable. For more detailed approach please visit:
