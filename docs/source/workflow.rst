@@ -122,7 +122,7 @@ After all the above configurations done we still would need to update ``FabSim3/
                  export LD_LIBRARY_PATH=/opt/gcc/10.2.0/snos/lib64:$LD_LIBRARY_PATH
                 
 
-Once all have been done, we can submit a simulation to a remote machine using the command:
+Once all has been done, we can submit a simulation to a remote machine using the command:
 
     .. code-block:: console
 		
