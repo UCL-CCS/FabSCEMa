@@ -64,27 +64,28 @@ The next important file that needs to be updated is
 	
               FabSim3/plugins/FabNEPTUNE/machines_FabNEPTUNE_user.yml 
 
-In this file you can set the path to the convection2d/3d executable on the remote machine which are Nektar++ executable and the input file names, and the remote run command. Here we assume that you have been able to run the basic FabSim examples described in the other documentation files, and that you have configured and built Nektar++ (https://www.nektar.info/) on the target machine, and successfully tested the executable code!. However, most HPC clusters could have Nektar++ available as a module and this can be added in the loaded modules section of the file. This means that the ``convection2d_exec`` parameter can be set to the path of the compiled executable. For example, archer2 remote machine might look like:
+In this file you can set the path to the convection2d/3d executable on the remote machine which are Nektar++ executable and the input file names, and the remote run command. Here we assume that you have been able to run the basic FabSim examples described in the other documentation files, and that you have configured and built Nektar++ (https://www.nektar.info/) on the target machine, and successfully tested the executable code!. However, most HPC clusters could have Nektar++ available as a module and this can be added in the loaded modules section of the file. This means that the ``convection2d_exec`` parameter can be set to the path of the compiled executable. For example, for archer2 (remote machine) it might look like:
 
 	.. code-block:: yaml
 
 		archer2:
-		   convection2d_exec: ".../nektar++/build/dist/bin/IncNavierStokesSolver"
+		       
+                   SCEMa_exec: "/mnt/lustre/a2fs-work2/work/e723/e723/kevinb/SCEMa/build/dealammps"
+
 		   ...
-		   FabNEPTUNE_params:
-                         convection_2d_input: "convection_2d.xml"
-                         convection_3d_input: "convection_3d.xml"
+		   SCEMa_params:
+                         SCEMa_input: "inputs.json"
                          sweep_dir_name: "SWEEP"
 
                    ...
-                   run_command_remote: "srun --nodes=1 --ntasks=1 --exclusive --oversubscribe --mem=25000M"
+                   run_command_SCEMa: "srun --nodes=1 --ntasks=1 --exclusive --oversubscribe --mem=5500M"
 		   ...
 		   ...
 		   ...
 		   modules:
 		      loaded: ["python"]
 
-After all the above configurations done we still would need to update ``FabSim3/fabsim/deploy/templates``. For example, the template (slurm-archer2) for archer2 remote machine might look like:
+After all the above configurations done we still would need to update ``FabSim3/fabsim/deploy/templates``. For example, the template (slurm-archer2) for archer2 it might look like:
 
            .. code-block:: bash
 	   
@@ -117,17 +118,15 @@ After all the above configurations done we still would need to update ``FabSim3/
                  export OMP_NUM_THREADS=1
                  export FI_MR_CACHE_MAX_COUNT=0
                  export PATH="/mnt/lustre/a2fs-work2/work/e723/e723/kevinb/miniconda3/bin:$PATH"
-                 export PATH="/mnt/lustre/a2fs-work2/work/e723/e723/kevinb/.local/.local/bin:$PATH"
-                 export NEK_DIR=/mnt/lustre/a2fs-work2/work/e723/e723/kevinb/nektarpp/build
-                 export NEK_BUILD=$NEK_DIR/dist/bin
-                 export LD_LIBRARY_PATH=/opt/gcc/10.2.0/snos/lib64:$NEK_DIR/ThirdParty/dist/lib:$NEK_DIR/dist/lib64:$LD_LIBRARY_PATH
-                 export PATH="/mnt/lustre/a2fs-work2/work/e723/e723/kevinb/nektarpp/build/dist/bin:$PATH"
+                 export PATH="/mnt/lustre/a2fs-work2/work/e723/e723/kevinb/.local/.local/bin:$PATH" 
+                 export LD_LIBRARY_PATH=/opt/gcc/10.2.0/snos/lib64:$LD_LIBRARY_PATH
+                
 
 Once all have been done, we can submit a simulation to a remote machine using the command:
 
     .. code-block:: console
 		
-		fabsim archer2 Convection2D_remote:convection_2d_test	
+		fabsim archer2 SCEMa:SCEMa_test1	
 
 and copy the results back to our local machine with
 
