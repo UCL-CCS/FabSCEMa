@@ -143,7 +143,7 @@ In the following we will provide a step-by-step demonstration of how to perform 
 .. image:: ../../images/allsurr.png
    :alt: allsurr
    :class: with-shadow
-   :scale: 40
+   :scale: 30
 
 step one
 --------
@@ -175,25 +175,25 @@ A working example:
 
 
            .. code-block:: bash
-	   
-                 {
-	           "problem type":{
-		   "class": "dogbone",
-		   "strain rate": ${strain_rate}
- 	         },
-                   "scale-bridging":{
-                   "activate md update": 1,
-                   "approximate md with hookes law": 0,
-                   "use pjm scheduler": 0
-                 },
-                   "continuum time":{
-                   "timestep length": 5.0e-7,
-                   "start timestep": 1,
-                   "end timestep": 15
-                 },
-                   "continuum mesh":{
-                   "fe degree": 1,
-                   "quadrature formula": 2,
+             	   
+               {
+	        "problem type":{
+		"class": "dogbone",
+		 "strain rate": ${strain_rate}
+ 	       },
+                "scale-bridging":{
+                "activate md update": 1,
+                "approximate md with hookes law": 0,
+                "use pjm scheduler": 0
+               },
+                "continuum time":{
+                "timestep length": 5.0e-7,
+                "start timestep": 1,
+                "end timestep": 15
+               },
+                "continuum mesh":{
+                "fe degree": 1,
+                "quadrature formula": 2,
                 "input": {
                    "style" : "cuboid",
                    "x length" : 0.03,
@@ -202,19 +202,19 @@ A working example:
                    "x cells" : 1,
                    "y cells" : 1,
                    "z cells" : 2
-                }
-                },
+              }
+              },
                "model precision":{
                  "md":{
                      "min quadrature strain norm": ${min_quadrature_strain_norm}
-                },
+             },
                 "clustering":{
                    "spline points": 10,
                    "min steps": 5000,
                    "diff threshold": 0.000001,
                    "scripts directory": "../../../../clustering"
-                }
-                },
+             }
+             },
                 "molecular dynamics material":{
                    "number of replicas": 1,
                    "list of materials": ["sic"],
@@ -381,7 +381,7 @@ step four
 
 Result of the analysis of EasySurrogate+EasyVVUQ+FabSCEMa simulation, based on Sobol method and a surrogate method (Deep Active Subspace, Gaussian Process Surrogate and Quantized SoftMax Network), are shown in the following examples [strain_rate, min_quadrature_strain_norm and Temperature as model inputs and stress_00_macro, stress_01_macro, stress_00_nano and stress_01_nano as model outputs]:
 
-Visual explanation of the surrogate method
+Visual explanation of the surrogate method (DAS)
 ------------------------------------------
 
 .. image:: ../../images/das.png
@@ -390,7 +390,7 @@ Visual explanation of the surrogate method
    :scale: 40
    
    
-Analysis results
+Analysis results (DAS)
 ----------------  
 
 .. image:: ../../images/das_r.png
@@ -399,7 +399,7 @@ Analysis results
    :scale: 40
  
  
-Visual explanation of the surrogate method
+Visual explanation of the surrogate method (GP)
 ------------------------------------------
 
 .. image:: ../../images/gp.png
@@ -408,7 +408,7 @@ Visual explanation of the surrogate method
    :scale: 40
    
    
-Analysis results
+Analysis results (GP)
 ----------------  
 
 .. image:: ../../images/gp_r.png
@@ -417,7 +417,7 @@ Analysis results
    :scale: 40   
 
 
-Visual explanation of the surrogate method
+Visual explanation of the surrogate method (QSN)
 ------------------------------------------
 
 .. image:: ../../images/qsn.png
@@ -426,7 +426,7 @@ Visual explanation of the surrogate method
    :scale: 40
    
    
-Analysis results
+Analysis results (QSN)
 ----------------  
 
 .. image:: ../../images/qsn_r.png
@@ -444,5 +444,7 @@ Visual comparison of the surrogate methods
 
 .. Note:: If you wish to modify the model inputs/outputs and then run the simulation, there are several options for doing this. It can be easily done by modification of the following python files (in fabSCEMa_easyvvuq_easysurrogate_InRuAn* subfolder):
     
-                SCEMa_easyvvuq_init_run_analyse_remote.py 
+    
+                SCEMa_easyvvuq_init_run_analyse_remote.py
+		and
                 easyvvuq_SCEMa_RUN_remote.py  
