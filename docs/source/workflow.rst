@@ -140,7 +140,7 @@ Practical Illustration
 
 In the following we will provide a step-by-step demonstration of how to perform a job submission and also we will demonstrate the output of analysis.
 
-.. image:: ../../images/allsurr.png
+.. image:: ../../images/surr_three.png
    :alt: allsurr
    :class: with-shadow
    :scale: 30
@@ -352,8 +352,11 @@ Submit a simulation to a remote/local machine using the command:
 
     .. code-block:: console
 		
-		fabsim archer2 SCEMa_init_run_analyse_campaign_remote:fabSCEMa_easyvvuq_easysurrogate_InRuAn1_DAS_QCGPJ
-		
+		fabsim archer2 SCEMa_init_run_analyse_campaign_remote:fabSCEMa_easyvvuq_easysurrogate_InRuAn1_DAS_QCGPJ [Deep Active Subspaces]
+		or
+		fabsim archer2 SCEMa_init_run_analyse_campaign_remote:fabSCEMa_easyvvuq_easysurrogate_InRuAn_GP_QCGPJ [Gaussian Process Surrogate]
+		or
+		fabsim archer2 SCEMa_init_run_analyse_campaign_remote:fabSCEMa_easyvvuq_easysurrogate_InRuAn_QSN_QCGPJ [Quantized SoftMax Network]
 
 
 
