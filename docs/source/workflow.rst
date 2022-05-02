@@ -140,147 +140,127 @@ Practical Illustration
 
 In the following we will provide a step-by-step demonstration of how to perform a job submission and also we will demonstrate the output of analysis.
 
+.. image:: ../../images/allsurr.png
+   :alt: allsurr
+   :class: with-shadow
+   :scale: 40
+
 step one
 --------
 
 Specific set of tasks required before submitting the job onto the remote/local machine. Two input files that are found in:
 
       .. code-block:: console
-             
-	     plugins/FabNEPTUNE/config_files/convection_2d_easyvvuq_easysurrogate_InRuAn*_DAS_QCGPJ 
+      
+             plugins/FabSCEMa/config_files/fabSCEMa_easyvvuq_InRuAn*_QCGPJ
+	     plugins/FabSCEMa/config_files/fabSCEMa_easyvvuq_InRuAn*_dask
+	     plugins/FabSCEMa/config_files/fabSCEMa_easyvvuq_InRuAn*_ThreadPoolExecutor
+	     plugins/FabSCEMa/config_files/fabSCEMa_easyvvuq_easysurrogate_InRuAn*_DAS_QCGPJ
+	     plugins/FabSCEMa/config_files/fabSCEMa_easyvvuq_easysurrogate_InRuAn_GP_QCGPJ
+	     plugins/FabSCEMa/config_files/fabSCEMa_easyvvuq_easysurrogate_InRuAn_QSN_QCGPJ
+	     
 
 are the most important files which can be modified for your own specific purpose.
 
-``convection_2d_remote.template`` file:
+``SCEMa_remote.template`` file:
 ---------------------------------------
  
     .. code-block:: console
 		
-		[convection_2d_remote.template] It is the convection2d input script in convection_2d_easyvvuq_easysurrogate_InRuAn*_DAS_QCGPJ subfolder, EasyVVUQ will substitute certain variables in this file to create the ensemble
+		[SCEMa_remote.template] It is the SCEMa input script in fabSCEMa_easyvvuq_easysurrogate_InRuAn* subfolder, EasyVVUQ will substitute certain variables in this file to create the ensemble
  
-Here, as shown in the following, Rayleigh, Prandtl, Temperature  and Diffusion Coefficient are selected as model inputs for Variance-based sensitivity analysis (Sobol method)
+Here, as shown in the following, strain_rate, min_quadrature_strain_norm and Temperature are selected as model inputs for Variance-based sensitivity analysis (Sobol method)
 
 A working example:
 
 
            .. code-block:: bash
 	   
-	         <?xml version="1.0" encoding="utf-8" ?>
-		 <NEKTAR>
-                 <EXPANSIONS>
-                    <E COMPOSITE="C[0]" NUMMODES="4" FIELDS="u,v,T,p" TYPE="GLL_LAGRANGE_SEM" />
-                 </EXPANSIONS>
-                 <CONDITIONS>
-                      <SOLVERINFO>
-                         <I PROPERTY="SOLVERTYPE"              VALUE="VCSWeakPressure"         />
-                         <I PROPERTY="EQTYPE"                  VALUE="UnsteadyNavierStokes"    />
-                         <I PROPERTY="Projection"              VALUE="Continuous"              />
-                         <I PROPERTY="EvolutionOperator"       VALUE="Nonlinear"               />
-                         <I PROPERTY="TimeIntegrationMethod"   VALUE="IMEXOrder2"              />
-                         <I PROPERTY="Driver"                  VALUE="Standard"                />
-                         <I PROPERTY="SpectralVanishingViscosity" VALUE="True"                 />
-                         <I PROPERTY="SpectralHPDealiasing"       VALUE="True"                 />
-                      </SOLVERINFO>
-                      <VARIABLES>
-                         <V ID="0"> u </V>
-                         <V ID="1"> v </V>
-                         <V ID="2"> T </V>
-                         <V ID="3"> p </V>
-                      </VARIABLES>
-                      <GLOBALSYSSOLNINFO>
-                        <V VAR="u,v,T,p">
-                           <I PROPERTY="IterativeSolverTolerance"  VALUE="1e-6"/>
-                        </V>
-                      </GLOBALSYSSOLNINFO>
-                     <PARAMETERS>
-                        <P> TimeStep        = 0.0000001            </P>
-                        <P> T_Final         = 0.0001               </P>
-                        <P> NumSteps        = T_Final/TimeStep     </P>
-                        <P> IO_infoSteps    = 10                   </P>
-                        <P> Ra              = ${Rayleigh}E2        </P>
-                        <P> Pr              = ${Prandtl}           </P>
-                        <P> Kinvis          = Pr                   </P>
-                    </PARAMETERS>
-                    <BOUNDARYREGIONS>
-                       <B ID="0"> C[1] </B>
-                       <B ID="1"> C[2] </B>
-                       <B ID="2"> C[3] </B>
-                       <B ID="3"> C[4] </B>
-                    </BOUNDARYREGIONS>
-                    <BOUNDARYCONDITIONS>
-                      <REGION REF="0">
-                        <D VAR="u" VALUE="0" />
-                        <D VAR="v" VALUE="0" />
-                        <N VAR="T" VALUE="0" />
-                        <N VAR="p" USERDEFINEDTYPE="H" VALUE="0" />
-                     </REGION>
-                     <REGION REF="1"> <!-- top (insulated) -->
-                        <D VAR="u" VALUE="0" />
-                        <D VAR="v" VALUE="0" />
-                        <N VAR="T" VALUE="0" />
-                        <N VAR="p" USERDEFINEDTYPE="H" VALUE="0" />
-                     </REGION>
-                     <REGION REF="2">
-                       <D VAR="u" VALUE="0" />
-                       <D VAR="v" VALUE="0" />
-                       <D VAR="T" VALUE="${Temperature}" />
-                       <N VAR="p" USERDEFINEDTYPE="H" VALUE="0" />
-                     </REGION>
-                     <REGION REF="3">
-                       <D VAR="u" VALUE="0" />
-                       <D VAR="v" VALUE="0" />
-                       <D VAR="T" VALUE="0" />
-                       <N VAR="p" USERDEFINEDTYPE="H" VALUE="0" />
-                     </REGION>
-                     </BOUNDARYCONDITIONS>
-                     <FUNCTION NAME="InitialConditions">
-                       <E VAR="u" VALUE="0" />
-                       <E VAR="v" VALUE="0" />
-                       <E VAR="T" VALUE="1-x" />
-                       <E VAR="p" VALUE="0" />
-                     </FUNCTION>
-                     <FUNCTION NAME="BodyForce">
-                       <E VAR="u" VALUE="0" EVARS="u v T p" />
-                       <E VAR="v" VALUE="Ra*Pr*T" EVARS="u v T p" />
-                       <E VAR="T" VALUE="0" EVARS="u v T p"  />
-                     </FUNCTION>
-                     <FUNCTION NAME="DiffusionCoefficient">
-                       <E VAR="T" VALUE="${DiffusionCoefficient}" />
-                     </FUNCTION>
-                 </CONDITIONS>		
-                 <FORCING>
-                    <FORCE TYPE="Body">
-                    <BODYFORCE> BodyForce </BODYFORCE>
-                 </FORCE>
-                 </FORCING>
-                 <FILTERS>
-                   <FILTER TYPE="AeroForces">
-                     <PARAM NAME="OutputFile"> NusseltTest1L  </PARAM>
-                     <PARAM NAME="OutputFrequency"> 10        </PARAM>
-                     <PARAM NAME="Boundary"> B[2]             </PARAM>
-                   </FILTER>
-                   <FILTER TYPE="AeroForces">
-                     <PARAM NAME="OutputFile"> NusseltTest1R  </PARAM>
-                     <PARAM NAME="OutputFrequency"> 10        </PARAM>
-                     <PARAM NAME="Boundary"> B[3]             </PARAM>
-                   </FILTER>
-                   <FILTER TYPE="HistoryPoints">
-                     <PARAM NAME="OutputFile"> PointTest      </PARAM>
-                     <PARAM NAME="OutputFrequency"> 10        </PARAM>
-                     <PARAM NAME="Points"> 0.5 1.0 0.0        </PARAM>
-                   </FILTER>
-	           <FILTER TYPE="AverageFields">
-    	             <PARAM NAME="OutputFile"> AveragedTest   </PARAM>
-                     <PARAM NAME="SampleFrequency"> 10        </PARAM>
-	           </FILTER>
-                 </FILTERS>
-                 </NEKTAR>
+                 {
+	           "problem type":{
+		   "class": "dogbone",
+		   "strain rate": ${strain_rate}
+ 	         },
+                   "scale-bridging":{
+                   "activate md update": 1,
+                   "approximate md with hookes law": 0,
+                   "use pjm scheduler": 0
+                 },
+                   "continuum time":{
+                   "timestep length": 5.0e-7,
+                   "start timestep": 1,
+                   "end timestep": 15
+                 },
+                   "continuum mesh":{
+                   "fe degree": 1,
+                   "quadrature formula": 2,
+                "input": {
+                   "style" : "cuboid",
+                   "x length" : 0.03,
+                   "y length" : 0.03,
+                   "z length" : 0.08,
+                   "x cells" : 1,
+                   "y cells" : 1,
+                   "z cells" : 2
+                }
+                },
+               "model precision":{
+                 "md":{
+                     "min quadrature strain norm": ${min_quadrature_strain_norm}
+                },
+                "clustering":{
+                   "spline points": 10,
+                   "min steps": 5000,
+                   "diff threshold": 0.000001,
+                   "scripts directory": "../../../../clustering"
+                }
+                },
+                "molecular dynamics material":{
+                   "number of replicas": 1,
+                   "list of materials": ["sic"],
+                   "distribution": {
+                   "style": "uniform",
+                   "proportions": [1.0]
+	        },
+               "rotation common ground vector":[1.0, 0.0, 0.0]
+                },
+               "molecular dynamics parameters":{
+               "temperature": ${temperature},
+               "timestep length": 0.002,
+               "strain rate": 1.0e-4,
+               "number of sampling steps": 100,
+               "scripts directory": "../../../../lammps_scripts_sisw",
+               "force field": "opls"
+               },
+               "computational resources":{
+               "machine cores per node": 24,
+               "maximum number of cores for FEM simulation": 1,
+               "minimum number of cores for MD simulation": 1
+               },
+               "output data":{
+               "checkpoint frequency": 1,
+               "visualisation output frequency": 1,
+               "analytics output frequency": 1,
+               "loaded boundary force output frequency": 1,
+               "homogenization output frequency": 1000
+               },
+               "directory structure":{
+               "macroscale input": "../../../../macroscale_input",
+               "nanoscale input": "../../../../nanoscale_input",
+               "macroscale output": "./macroscale_output",
+               "nanoscale output": "./nanoscale_output",
+               "macroscale restart": "./macroscale_restart",
+               "nanoscale restart": "./nanoscale_restart",
+               "macroscale log": "./macroscale_log",
+               "nanoscale log": "./nanoscale_log"
+                }
+               }
 
 
 Visual explanation of the concept
 ---------------------------------
 
-.. image:: ../../images/minx.png
+.. image:: ../../images/scema_input.png
    :alt: modelinputs
    :class: with-shadow
    :scale: 40
@@ -290,66 +270,62 @@ Visual explanation of the concept
 
     .. code-block:: console
 		
-		[campaign_params_remote.yml] It is the configuration file, in convection_2d_easyvvuq_easysurrogate_InRuAn*_DAS_QCGPJ subfolder, for EasyVVUQ sampler. If you need different sampler, parameter to be varied, or polynomial order, you can set them in this file
+		[campaign_params_remote.yml] It is the configuration file, in fabSCEMa_easyvvuq_easysurrogate_InRuAn* subfolder, for EasyVVUQ sampler. If you need different sampler, parameter to be varied, or polynomial order, you can set them in this file
 		
-Here, as shown in the following, F1-press_L, F1-visc_L, F1-pres_R and F1-visc_R are selected as model outputs for Variance-based sensitivity analysis (Sobol method)
+Here, as shown in the following, stress_00_macro, stress_01_macro, stress_02_macro, stress_11_macro, stress_12_macro, stress_22_macro, stress_00_nano, stress_01_nano, stress_02_nano, stress_11_nano, stress_12_nano and stress_22_nano are selected as model outputs for Variance-based sensitivity analysis (Sobol method)
 
 A working Example:
 
 	.. code-block:: yaml
 
-		parameters:
-                           # <parameter_name:>
-                           #   uniform_range: [<lower value>,<upper value>] 
-                           Rayleigh:
-                                   uniform_range: [0.5, 20000]
-                           Prandtl:
-                                   uniform_range: [5, 8.0]
-                           DiffusionCoefficient:
-                                   uniform_range: [0.5, 2.0]
-                           Temperature:
-                                   uniform_range: [1.5, 80.0]
+                parameters:
+                         # <parameter_name:>
+                         #   uniform_range: [<lower value>,<upper value>] 
+                         strain_rate:
+                              uniform_range: [0.0002, 0.06]
+                         temperature:
+                              uniform_range: [300, 550]
+                         min_quadrature_strain_norm:
+                              uniform_range: [1.0e-12, 1.0e-8]
 
-                selected_parameters: ["Rayleigh",  'Prandtl', 'DiffusionCoefficient', 'Temperature']
+                selected_parameters: ["strain_rate", "temperature", "min_quadrature_strain_norm"]
 
                 polynomial_order: 3
 
-                campaign_name: "FabNEPTUNE"
+                campaign_name: "FabSCEMa"
 
-                sub_campaign_name: "FabNEPTUNE_surrogate"
+                sub_campaign_name: "FabSCEMa_surrogate"
 
                 encoder_delimiter: "@"
 
-                encoder_template_fname : "convection_2d_remote.template"
-                encoder_target_filename: "convection_2d.xml"
+                encoder_template_fname : "SCEMa_remote.template"
+                encoder_target_filename: "inputs.json"
                 decoder_target_filename: "output.csv"
 
-                decoder_output_columns: ['F1-press_L', 'F1-visc_L', 'F1-pres_R', 'F1-visc_R']
 
+                decoder_output_columns: ['stress_00_macro', 'stress_01_macro', 'stress_02_macro', 'stress_11_macro', 'stress_12_macro',
+                'stress_22_macro', 'stress_00_nano', 'stress_01_nano', 'stress_02_nano','stress_11_nano', 'stress_12_nano', 'stress_22_nano']
+
+
+                #"type": "float", "min": 0.0, "max": 100.0, "default": 95.0
                 params:
-                  Rayleigh:
+                  strain_rate:
                      type: "float"
                      min: "0.0"
-                     max: "21000"
-                     default: "1.0"
+                     max: "0.06"
+                     default: "0.002"
 
-                  Prandtl:
-                     type: "float"
-                     min: "0.0"
-                     max: "8.5"
-                     default: "7.0"
-
-                  DiffusionCoefficient:
-                     type: "float"
-                     min: "0.0"
-                     max: "2.5"
-                     default: "1.0"
-
-                 Temperature:
+                 temperature:
                     type: "float"
                     min: "0.0"
-                    max: "81.5"
-                    default: "1.0"
+                    max: "600"
+                    default: "350"
+
+                 min_quadrature_strain_norm:
+                    type: "float"
+                    min: "0.0"
+                    max: "1.0e-8"
+                    default: "1.0e-10"
 
 
                 sampler_name: "PCESampler"
@@ -364,7 +340,7 @@ A working Example:
 Visual explanation of the concept
 ---------------------------------
 
-.. image:: ../../images/cov_2d_output.png
+.. image:: ../../images/scema_output.png
    :alt: modeloutputs
    :class: with-shadow
    :scale: 40
@@ -376,7 +352,7 @@ Submit a simulation to a remote/local machine using the command:
 
     .. code-block:: console
 		
-		fabsim archer2 Convection2D_init_run_analyse_campaign_remote:convection_2d_easyvvuq_easysurrogate_InRuAn1_DAS_QCGPJ
+		fabsim archer2 SCEMa_init_run_analyse_campaign_remote:fabSCEMa_easyvvuq_easysurrogate_InRuAn1_DAS_QCGPJ
 		
 
 
@@ -403,14 +379,13 @@ Copy the results back to you local machine with
 step four
 ----------
 
-Result of the analysis of EasySurrogate+EasyVVUQ+FabNEPTUNE simulation, based on Sobol method and a surrogate method (Deep Active Subspace
-), are shown in the following examples [Rayleigh, Prandtl, Temperature and Diffusion Coefficient as model inputs and F1-press_L, F1-visc_L, F1-pres_R and F1-visc_R as model outputs]:
+Result of the analysis of EasySurrogate+EasyVVUQ+FabSCEMa simulation, based on Sobol method and a surrogate method (Deep Active Subspace, Gaussian Process Surrogate and Quantized SoftMax Network), are shown in the following examples [strain_rate, min_quadrature_strain_norm and Temperature as model inputs and stress_00_macro, stress_01_macro, stress_00_nano and stress_01_nano as model outputs]:
 
 Visual explanation of the surrogate method
 ------------------------------------------
 
-.. image:: ../../images/surrogate.png
-   :alt: surmodel
+.. image:: ../../images/das.png
+   :alt: DAS
    :class: with-shadow
    :scale: 40
    
@@ -418,19 +393,56 @@ Visual explanation of the surrogate method
 Analysis results
 ----------------  
 
-.. image:: ../../images/ssm.png
-   :alt: model_ss
+.. image:: ../../images/das_r.png
+   :alt: DAS_r
+   :class: with-shadow
+   :scale: 40
+ 
+ 
+Visual explanation of the surrogate method
+------------------------------------------
+
+.. image:: ../../images/gp.png
+   :alt: GP
    :class: with-shadow
    :scale: 40
    
-.. image:: ../../images/sm.png
-   :alt: mode_s
+   
+Analysis results
+----------------  
+
+.. image:: ../../images/gp_r.png
+   :alt: GP_r
+   :class: with-shadow
+   :scale: 40   
+
+
+Visual explanation of the surrogate method
+------------------------------------------
+
+.. image:: ../../images/qsn.png
+   :alt: QSN
+   :class: with-shadow
+   :scale: 40
+   
+   
+Analysis results
+----------------  
+
+.. image:: ../../images/qsn_r.png
+   :alt: GSN_r
    :class: with-shadow
    :scale: 40 
-   
 
-   
-.. Note:: If you wish to modify the model inputs/outputs and then run the simulation, there are several options for doing this. It can be easily done by modification of the following python files (in convection_2d_easyvvuq_easysurrogate_InRuAn*_DAS_QCGPJ subfolder):
+Visual comparison of the surrogate methods
+------------------------------------------
+
+.. image:: ../../images/comp.png
+   :alt: COMP
+   :class: with-shadow
+   :scale: 40
+
+.. Note:: If you wish to modify the model inputs/outputs and then run the simulation, there are several options for doing this. It can be easily done by modification of the following python files (in fabSCEMa_easyvvuq_easysurrogate_InRuAn* subfolder):
     
-                convection_2d_easyvvuq_init_run_analyse_remote.py 
-                easyvvuq_convection_2d_RUN_remote.py  
+                SCEMa_easyvvuq_init_run_analyse_remote.py 
+                easyvvuq_SCEMa_RUN_remote.py  
