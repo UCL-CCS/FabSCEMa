@@ -207,21 +207,21 @@ A working example:
                "model precision":{
                  "md":{
                      "min quadrature strain norm": ${min_quadrature_strain_norm}
-                },
-                "clustering":{
+               },
+               "clustering":{
                    "spline points": 10,
                    "min steps": 5000,
                    "diff threshold": 0.000001,
                    "scripts directory": "../../../../clustering"
-                }
-                },
-                "molecular dynamics material":{
+               }
+               },
+               "molecular dynamics material":{
                    "number of replicas": 1,
                    "list of materials": ["sic"],
                    "distribution": {
                    "style": "uniform",
                    "proportions": [1.0]
-	        },
+	       },
                "rotation common ground vector":[1.0, 0.0, 0.0]
                 },
                "molecular dynamics parameters":{
