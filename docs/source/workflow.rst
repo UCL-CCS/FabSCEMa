@@ -202,19 +202,19 @@ A working example:
                    "x cells" : 1,
                    "y cells" : 1,
                    "z cells" : 2
-              }
-              },
+               }
+               },
                "model precision":{
                  "md":{
                      "min quadrature strain norm": ${min_quadrature_strain_norm}
-             },
+                },
                 "clustering":{
                    "spline points": 10,
                    "min steps": 5000,
                    "diff threshold": 0.000001,
                    "scripts directory": "../../../../clustering"
-             }
-             },
+                }
+                },
                 "molecular dynamics material":{
                    "number of replicas": 1,
                    "list of materials": ["sic"],
