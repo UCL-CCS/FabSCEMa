@@ -379,7 +379,7 @@ Copy the results back to you local machine with
 step four
 ----------
 
-Result of the analysis of EasySurrogate+EasyVVUQ+FabSCEMa simulation, based on Sobol method and a surrogate method (Deep Active Subspace, Gaussian Process Surrogate and Quantized SoftMax Network), are shown in the following examples [strain_rate, min_quadrature_strain_norm and Temperature as model inputs and stress_00_macro, stress_01_macro, stress_00_nano and stress_01_nano as model outputs]:
+Results of the analysis of EasySurrogate+EasyVVUQ+FabSCEMa simulation, based on Sobol method and three surrogate methods (Deep Active Subspace, Gaussian Process Surrogate and Quantized SoftMax Network), are shown in the following examples [strain_rate, min_quadrature_strain_norm and Temperature as model inputs and stress_00_macro, stress_01_macro, stress_00_nano and stress_01_nano as model outputs]:
 
 Visual explanation of the surrogate method (DAS)
 ------------------------------------------
