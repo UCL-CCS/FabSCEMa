@@ -64,7 +64,8 @@ Build deal.II
 
 From within the deal.II directory, run the following configure command
     .. code-block:: console
-		
+    
+	mkdir /work/yours/bin/deal.II	
 	CC=cc CXX=CC FC=ftn cmake -DCMAKE_INSTALL_PREFIX=/work/yours/bin/deal.II -DDEAL_II_WITH_MPI=ON -DDEAL_II_WITH_PETSC=ON -DPETSC_DIR=/work/yours/petsc-3.16.2 -DPETSC_ARCH=arch-linux-c-debug  -DDEAL_II_WITH_LAPACK=OFF ..
 	
 And then build deal.II
@@ -116,6 +117,7 @@ All can be done using a job script, which might look like the following
 
 
                      # Build deal.II
+		     mkdir /work/yours/bin/deal.II
                      cd /work/yours/dealii-9.0.1/build
                      CC=cc CXX=CC FC=ftn cmake -DCMAKE_INSTALL_PREFIX=/work/yours/bin/deal.II -DDEAL_II_WITH_MPI=ON -DDEAL_II_WITH_PETSC=ON -    
 		     DPETSC_DIR=/work/yours/petsc-3.16.2 -DPETSC_ARCH=arch-linux-c-debug  -DDEAL_II_WITH_LAPACK=OFF ..
@@ -218,7 +220,7 @@ Where the file CMakeLists.txt needs to be edited to point toward the right insta
 Then run the following commands
      .. code-block:: console
      
-	mkdir /work/yours/bin/deal.II
+	(/work/yours/bin/deal.II must exist!)
 	cd build
 	cmake -DDEAL_II_DIR=/work/yours/bin/deal.II ../
 	
@@ -429,7 +431,23 @@ which are found in
 ``plugins/FabSCEMa/config_files/fabSCEMa_easyvvuq_easysurrogate_InRuAn_QSN_QCGPJ``
 ``plugins/FabSCEMa/templates``
 
-This environment is used by EasyVVUQ campaign. 
+This environment is used by EasyVVUQ campaign. For example if you want to execute the SCEMa jobs on a remote machine do only the following:
+
+First, open the file: SCEMa_easyvvuq_init_run_analyse_remote.py and modify it to your virtual environment
+
+...
+with QCGPJPool(template_params={'venv': '/mnt/lustre/a2fswork2/work/e723/e723/kevinb/venv_kevin'}) as qcgpj:
+        campaign.execute(pool=qcgpj).collate(progress_bar=True)
+...
+
+and then open  FabSCEMa/templates/SCEMa_init_run_analyse_campaign_remote and modify it to your python environment
+
+...
+/mnt/lustre/a2fs-work2/work/e723/e723/kevinb/miniconda3/envs/py38/bin/python3.8     SCEMa_easyvvuq_init_run_analyse_remote.py     $machine_name    '$run_command_SCEMa'   $SCEMa_exec
+...
+
+.. Note:: If you  want to run FabSCEMa on your local machine and execute the SCEMa jobs on a remote machine (e.g. fabsim  archer2 ...), you need to have the virtual environment on remote machine and you only need to have FabSCEMa installed on your local macchine (no need for installation of FabSCEMa on a remote machine!)
+
 
 You can install virtualenv using:
     .. code-block:: console
