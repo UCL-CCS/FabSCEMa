@@ -433,7 +433,7 @@ which are found in
 
 This environment is used by EasyVVUQ campaign. For example if you want to execute the SCEMa jobs on a remote machine do only the following:
 
-First, open the file "SCEMa_easyvvuq_init_run_analyse_remote.py" and modify it to your virtual environment
+First, open the file "SCEMa_easyvvuq_init_run_analyse_remote.py" and modify it with your path (your virtual environment)
 
      .. code-block:: console
      
@@ -443,7 +443,7 @@ First, open the file "SCEMa_easyvvuq_init_run_analyse_remote.py" and modify it t
                        ...
 
 
-and then open  "FabSCEMa/templates/SCEMa_init_run_analyse_campaign_remote" and modify it to your python environment
+and then open  "FabSCEMa/templates/SCEMa_init_run_analyse_campaign_remote" and modify it with your path (your python environment)
 
      .. code-block:: console
      
