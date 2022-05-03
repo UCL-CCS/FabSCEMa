@@ -452,7 +452,7 @@ and then open  "FabSCEMa/templates/SCEMa_init_run_analyse_campaign_remote" and m
                        ...
 
 
-.. Note:: If you  want to run FabSCEMa on your local machine and execute the SCEMa jobs on a remote machine (e.g. fabsim  archer2 ...), you need to have the virtual environment on remote machine and you only need to have FabSCEMa installed on your local macchine (no need for installation of FabSCEMa on a remote machine!)
+.. Note:: If you  want to run FabSCEMa on your local machine and execute the SCEMa jobs on a remote machine (e.g. fabsim  archer2 ...), you need to have the virtual environment on remote machine and you only need to have FabSCEMa installed on your local machine (no need for the additional installation of FabSCEMa on a remote machine!)
 
 
 You can install virtualenv using:
