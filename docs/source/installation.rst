@@ -433,18 +433,24 @@ which are found in
 
 This environment is used by EasyVVUQ campaign. For example if you want to execute the SCEMa jobs on a remote machine do only the following:
 
-First, open the file: SCEMa_easyvvuq_init_run_analyse_remote.py and modify it to your virtual environment
+First, open the file "SCEMa_easyvvuq_init_run_analyse_remote.py" and modify it to your virtual environment
 
-...
-with QCGPJPool(template_params={'venv': '/mnt/lustre/a2fswork2/work/e723/e723/kevinb/venv_kevin'}) as qcgpj:
-        campaign.execute(pool=qcgpj).collate(progress_bar=True)
-...
+     .. code-block:: console
+     
+                       ...
+                       with QCGPJPool(template_params={'venv': '/mnt/lustre/a2fswork2/work/e723/e723/kevinb/venv_kevin'}) as qcgpj:
+                       campaign.execute(pool=qcgpj).collate(progress_bar=True)
+                       ...
 
-and then open  FabSCEMa/templates/SCEMa_init_run_analyse_campaign_remote and modify it to your python environment
 
-...
-/mnt/lustre/a2fs-work2/work/e723/e723/kevinb/miniconda3/envs/py38/bin/python3.8     SCEMa_easyvvuq_init_run_analyse_remote.py     $machine_name    '$run_command_SCEMa'   $SCEMa_exec
-...
+and then open  "FabSCEMa/templates/SCEMa_init_run_analyse_campaign_remote" and modify it to your python environment
+
+     .. code-block:: console
+     
+                       ...
+                       /mnt/lustre/a2fs-work2/work/e723/e723/kevinb/miniconda3/envs/py38/bin/python3.8     SCEMa_easyvvuq_init_run_analyse_remote.py                              $machine_name    '$run_command_SCEMa'   $SCEMa_exec
+                       ...
+
 
 .. Note:: If you  want to run FabSCEMa on your local machine and execute the SCEMa jobs on a remote machine (e.g. fabsim  archer2 ...), you need to have the virtual environment on remote machine and you only need to have FabSCEMa installed on your local macchine (no need for installation of FabSCEMa on a remote machine!)
 
