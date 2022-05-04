@@ -446,7 +446,7 @@ and then open  "FabSCEMa/templates/SCEMa_init_run_analyse_campaign_remote" and m
      .. code-block:: console
      
                        ...
-                       /mnt/lustre/a2fs-work2/work/e723/e723/kevinb/miniconda3/envs/py38/bin/python3.8     SCEMa_easyvvuq_init_run_analyse_remote.py                              $machine_name    '$run_command_SCEMa'   $SCEMa_exec
+                       /mnt/lustre/a2fs-work2/work/e723/e723/kevinb/miniconda3/envs/py38/bin/python3.8  SCEMa_easyvvuq_init_run_analyse_remote.py  $machine_name    '$run_command_SCEMa'   $SCEMa_exec 
                        ...
 
 
