@@ -309,7 +309,7 @@ def init_run_analyse_campaign(work_dir=None, sampler_inputs_dir=None , inpt=None
     #
 
     for s_string in output_column:
-        print_to_file(str=s_string, results=results, campaign_work_dir=campaign_work_dir)
+        print_to_file(str=s_string, results=results, campaign_work_dir=campaign_work_dir, campaign_params=campaign_params['sampler_name'])
 
     time_end = time.time()
     print("Time for phase 7 = %.3f" % (time_end - time_start))
