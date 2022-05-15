@@ -10,6 +10,15 @@ start_time="$(date -u +%s.%n)"
 # executing easyvvuq sampler
 # warning: first install miniconda and then create new environment
 echo "starting SCEMa!"
+
+if [[ ! -e macroscale_input ]]; then
+    mkdir  macroscale_input
+elif [[ ! -d  macroscale_input ]]; then
+    echo "macroscale_input already exists but is not a directory" 1>&2
+fi
+
+
+
 /mnt/lustre/a2fs-work2/work/e723/e723/kevinb/miniconda3/envs/py38/bin/python3.8     SCEMa_easyvvuq_init_run_analyse_remote.py     $machine_name    '$run_command_SCEMa'   $SCEMa_exec
 
 end_time="$(date -u +%s.%n)"

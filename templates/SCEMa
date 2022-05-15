@@ -7,6 +7,11 @@ echo "Start $SCEMa_exec program..."
 start_time="$(date -u +%s.%n)"
 echo "input json file location:  $SCEMa_input"
 
+if [[ ! -e macroscale_input ]]; then
+    mkdir  macroscale_input
+elif [[ ! -d  macroscale_input ]]; then
+    echo "macroscale_input already exists but is not a directory" 1>&2
+fi
 
 $run_command  $SCEMa_exec  $SCEMa_input
 

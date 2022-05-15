@@ -6,6 +6,11 @@ $run_prefix
 
 start_time="$(date -u +%s.%n)"
 
+if [[ ! -e macroscale_input ]]; then
+    mkdir  macroscale_input
+elif [[ ! -d  macroscale_input ]]; then
+    echo "macroscale_input already exists but is not a directory" 1>&2
+fi
 
 # executing easyvvuq sampler
 python3   SCEMa_easyvvuq_init_run_analyse_local.py     $machine_name    '$run_command'   $SCEMa_exec

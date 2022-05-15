@@ -1,0 +1,67 @@
+parameters:
+    # <parameter_name:>
+    #   uniform_range: [<lower value>,<upper value>] 
+    strain_rate2:
+        uniform_range: [1, 20]
+    temperature:
+        uniform_range: [300, 550]
+    numberofsamplingsteps:
+        uniform_range: [ 1, 20]
+    timesteplength:
+        uniform_range: [1, 20]
+
+selected_parameters: ["strain_rate2",  "temperature", "numberofsamplingsteps", "timesteplength"]
+#selected_parameters: ["strain_rate2"]
+#selected_parameters: ["strain_rate2", "numberofsamplingsteps", "timesteplength"]
+
+
+polynomial_order: 3
+
+campaign_name: "FabSCEMa"
+
+sub_campaign_name: "FabSCEMa_surrogate"
+
+encoder_delimiter: "@"
+
+encoder_template_fname : "SCEMa_remote.template"
+encoder_target_filename: "inputs.json"
+decoder_target_filename: "output.csv"
+#  ['index','stress_00_macro','stress_01_macro','stress_02_macro','stress_11_macro','stress_12_macro','stress_22_macro']
+#  ['index','stress_00_nano', 'stress_01_nano', 'stress_02_nano', 'stress_11_nano', 'stress_12_nano','stress_22_nano']
+#decoder_output_columns: ['index', 'stress_00_macro', 'stress_01_macro', 'stress_02_macro', 'stress_11_macro', 'stress_12_macro', 'stress_22_macro', 'stress_00_nano', 'stress_01_nano', 'stress_02_nano','stress_11_nano', 'stress_12_nano', 'stress_22_nano']
+
+decoder_output_columns: ['stress_00_macro', 'stress_01_macro', 'stress_02_macro', 'stress_11_macro', 'stress_12_macro',
+                'stress_22_macro', 'stress_00_nano', 'stress_01_nano', 'stress_02_nano','stress_11_nano', 'stress_12_nano', 'stress_22_nano']
+
+params:
+  strain_rate2:
+    type: "integer"
+    min: "0"
+    max: "30"
+    default: "1"
+
+  temperature:
+    type: "integer"
+    min: "0"
+    max: "600"
+    default: "350"
+
+  timesteplength:
+    type: "integer"
+    min: "0"
+    max: "20"
+    default: "20"
+
+  numberofsamplingsteps:
+    type: "integer"
+    min: "0"
+    max: "30"
+    default: "10"
+
+sampler_name: "SCSampler"
+distribution_type: "DiscreteUniform" # Uniform, DiscreteUniform
+quadrature_rule: "G"
+sparse: False
+growth: False
+midpoint_level1: False
+dimension_adaptive: False
