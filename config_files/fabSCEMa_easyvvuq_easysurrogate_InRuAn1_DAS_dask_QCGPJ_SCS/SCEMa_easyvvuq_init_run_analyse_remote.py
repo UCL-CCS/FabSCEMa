@@ -29,37 +29,72 @@ from easyvvuq.actions import QCGPJPool
 
 import sys
 
-def print_to_file(str=None, results=None, campaign_work_dir=None):
+def print_to_file(str=None, results=None, campaign_work_dir=None, campaign_params=None):
 
-    results.plot_moments(qoi="{}".format(str), ylabel="{}".format(str), xlabel="Time", alpha=0.2,
-                         filename=os.path.join(campaign_work_dir, '{}_moments.png'.format(str)))
-    results.plot_sobols_first(
-        qoi="{}".format(str), xlabel="Time",
-        filename=os.path.join(campaign_work_dir, '{}_sobol_first.png'.format(str))
-    )
+    if campaign_params == 'SCSampler':
+    #     results.plot_moments(qoi="{}".format(str), ylabel="{}".format(str), xlabel="Time", alpha=0.2,
+    #                          filename=os.path.join(campaign_work_dir, '{}_moments.png'.format(str)))
+        results.plot_sobols_first(
+            qoi="{}".format(str), xlabel="Time",
+            filename=os.path.join(campaign_work_dir, '{}_sobol_first.png'.format(str))
+        )
 
-    rho11 = results.describe('{}'.format(str), 'mean')
-    for k in results.sobols_total()['{}'.format(str)].keys():
-        plt.plot(rho11, results.sobols_total()['{}'.format(str)][k], label=k)
-    plt.legend(loc=0)
-    plt.xlabel('{} [Pa]'.format(str))
-    plt.ylabel('sobol_total')
-    plt.title('{}'.format(str))
-    plt.savefig(os.path.join(campaign_work_dir, '{}_sobols_total.png'.format(str)))
-    print("saving {}_sobol_total.png -->".format(str),
-          os.path.join(campaign_work_dir, '{}_sobol_total.png'.format(str)))
+        # rho11 = results.describe('{}'.format(str), 'mean')
+        # for k in results.sobols_total()['{}'.format(str)].keys():
+        #     plt.plot(rho11, results.sobols_total()['{}'.format(str)][k], label=k)
+        # plt.legend(loc=0)
+        # plt.xlabel('{} [Pa]'.format(str))
+        # plt.ylabel('sobol_total')
+        # plt.title('{}'.format(str))
+        # plt.savefig(os.path.join(campaign_work_dir, '{}_sobols_total.png'.format(str)))
+        # print("saving {}_sobol_total.png -->".format(str),
+        #       os.path.join(campaign_work_dir, '{}_sobol_total.png'.format(str)))
+        #
+        # rho12 = results.describe('{}'.format(str), 'mean')
+        # for k1 in results.sobols_second()['{}'.format(str)].keys():
+        #     for k2 in results.sobols_second()['{}'.format(str)][k1].keys():
+        #         plt.plot(rho12, results.sobols_second()['{}'.format(str)][k1][k2], label=k1 + '/' + k2)
+        # plt.legend(loc=0, ncol=2)
+        # plt.xlabel('{} [Pa]'.format(str))
+        # plt.ylabel('sobol_second')
+        # plt.title('{}'.format(str))
+        # plt.savefig(os.path.join(campaign_work_dir, '{}_sobol_second.png'.format(str)))
+        # print("saving {}_sobol_second.png -->".format(str),
+        #       os.path.join(campaign_work_dir, '{}_sobol_second.png'.format(str)))
 
-    rho12 = results.describe('{}'.format(str), 'mean')
-    for k1 in results.sobols_second()['{}'.format(str)].keys():
-        for k2 in results.sobols_second()['{}'.format(str)][k1].keys():
-            plt.plot(rho12, results.sobols_second()['{}'.format(str)][k1][k2], label=k1 + '/' + k2)
-    plt.legend(loc=0, ncol=2)
-    plt.xlabel('{} [Pa]'.format(str))
-    plt.ylabel('sobol_second')
-    plt.title('{}'.format(str))
-    plt.savefig(os.path.join(campaign_work_dir, '{}_sobol_second.png'.format(str)))
-    print("saving {}_sobol_second.png -->".format(str),
-          os.path.join(campaign_work_dir, '{}_sobol_second.png'.format(str)))
+    elif campaign_params == 'PCESampler':
+        results.plot_moments(qoi="{}".format(str), ylabel="{}".format(str), xlabel="Time", alpha=0.2,
+                             filename=os.path.join(campaign_work_dir, '{}_moments.png'.format(str)))
+        results.plot_sobols_first(
+            qoi="{}".format(str), xlabel="Time",
+            filename=os.path.join(campaign_work_dir, '{}_sobol_first.png'.format(str))
+        )
+
+        rho11 = results.describe('{}'.format(str), 'mean')
+        for k in results.sobols_total()['{}'.format(str)].keys():
+            plt.plot(rho11, results.sobols_total()['{}'.format(str)][k], label=k)
+        plt.legend(loc=0)
+        plt.xlabel('{} [Pa]'.format(str))
+        plt.ylabel('sobol_total')
+        plt.title('{}'.format(str))
+        plt.savefig(os.path.join(campaign_work_dir, '{}_sobols_total.png'.format(str)))
+        print("saving {}_sobol_total.png -->".format(str),
+              os.path.join(campaign_work_dir, '{}_sobol_total.png'.format(str)))
+
+        rho12 = results.describe('{}'.format(str), 'mean')
+        for k1 in results.sobols_second()['{}'.format(str)].keys():
+            for k2 in results.sobols_second()['{}'.format(str)][k1].keys():
+                plt.plot(rho12, results.sobols_second()['{}'.format(str)][k1][k2], label=k1 + '/' + k2)
+        plt.legend(loc=0, ncol=2)
+        plt.xlabel('{} [Pa]'.format(str))
+        plt.ylabel('sobol_second')
+        plt.title('{}'.format(str))
+        plt.savefig(os.path.join(campaign_work_dir, '{}_sobol_second.png'.format(str)))
+        print("saving {}_sobol_second.png -->".format(str),
+              os.path.join(campaign_work_dir, '{}_sobol_second.png'.format(str)))
+
+    else:
+        print("No implementation!")
 
 
 def init_run_analyse_campaign(work_dir=None, sampler_inputs_dir=None , inpt=None):
